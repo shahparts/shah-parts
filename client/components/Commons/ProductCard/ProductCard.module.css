@@ -1,0 +1,45 @@
+.ProductCard {
+    color: white;
+    width: 100%;
+    border-radius: 4px;
+}
+
+
+.ProductCard button {
+    background-color: #000 !important;
+}
+
+.ProductCard img {
+    width: 100% !important;
+    max-height: 500px;
+    object-fit: cover;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.ProductCard h2 {
+    color: black;
+    margin: 6px 0px;
+    font-size: 17px;
+}
+
+.ProductCard p {
+    color: black;
+    margin-bottom: 16px;
+    color: var(--fs-color-primary);
+    font-weight: bolder;
+}
+
+/* Cart */
+
+
+@media (max-width: 767px) {
+    .ProductCard img {
+        height: 220px !important;
+    }
+
+    .ProductCard h2 {
+        font-size: 15px !important;
+        margin-top: 0px !important;
+    }
+}

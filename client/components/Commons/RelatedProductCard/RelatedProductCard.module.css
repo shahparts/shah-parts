@@ -1,0 +1,44 @@
+.RelatedProductCard {
+    color: white;
+    width: 100%;
+    border-radius: 4px;
+    display: flex;
+    /* align-items: center; */
+    gap: 15px;
+    cursor: pointer !important;
+}
+
+
+.RelatedProductCard button {
+    background-color: #000 !important;
+}
+
+.RelatedProductCard a {
+    max-width: 140px !important;
+    height: max-content !important;
+}
+
+.RelatedProductCard img {
+    width: 100% !important;
+    max-width: 140px;
+    height: max-content !important;
+    /* object-fit: cover; */
+}
+
+.RelatedProductCard .rightPart {
+    max-width: 170px !important;
+}
+
+.RelatedProductCard h2 {
+    color: black;
+    margin-bottom: 6px;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.RelatedProductCard p {
+    color: black;
+    margin-bottom: 0px;
+    color: var(--fs-color-primary);
+    font-weight: bolder;
+}

@@ -1,0 +1,18 @@
+.DeleteModal .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 17px;
+    margin-top: 23px;
+}
+
+.DeleteModal .buttons button {
+    width: 100%;
+}
+
+.DeleteModal .buttons button {
+    background-color: var(--primary-color);
+    padding: 10px;
+    color: white;
+    border-radius: 8px;
+}

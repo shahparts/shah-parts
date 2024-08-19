@@ -1,0 +1,141 @@
+.ShopPage {
+    margin: 0px;
+}
+
+.ShopPage .top {
+    padding: 40px;
+}
+
+.ShopPage .title {
+    font-size: 43px;
+    font-weight: bolder;
+    border-bottom: 1px solid rgb(214, 217, 218);
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color: var(--fs-color-primary);
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.ShopPage .title::before {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 32px;
+    background-color: var(--fs-color-primary);
+}
+
+.ShopPage .top p {
+    margin-bottom: 32px;
+    font-size: 17px;
+    /* text-align: center; */
+}
+
+.ShopPage .scroll {
+    overflow-x: hidden !important;
+}
+
+.ShopPage .sortSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 23px;
+    padding: 40px;
+    border-bottom: 1px solid #dadada;
+    padding-bottom: 23px;
+    padding-top: 15px;
+}
+
+.ShopPage .sortSection .right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ShopPage .sortSection .sortSelect {
+    width: 200px;
+    padding-right: 10px;
+}
+
+.ShopPage .sortSection .sortSelect>div,
+.ShopPage .filters .filterSection .select>div {
+    border: none !important;
+}
+
+.ShopPage .sortSection h4 {
+    font-size: 23px;
+}
+
+.ShopPage .sortSection p {
+    font-size: 17px;
+    color: #999;
+}
+
+.ShopPage .filters {
+    margin: 10px 40px;
+    margin-bottom: 40px;
+}
+
+.ShopPage .filters .filterSection .select {
+    width: 100%;
+}
+
+.ShopPage .filters .filterSection .select>div {
+    padding-bottom: 0px;
+    padding-left: 0px !important;
+    border-bottom: 1px solid #999 !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}
+
+.ShopPage .filters .filterSection .select>div:hover,
+.ShopPage .filters .filterSection .select>div:focus {
+    box-shadow: none !important;
+}
+
+.ShopPage .filters .filterSection .select span,
+.ShopPage .filters .sortSection .sortSelect span {
+    color: black !important;
+    font-size: 17px;
+}
+
+.ShopPage .filters .filterSection .select span:last-of-type {
+    margin-top: -6px !important;
+}
+
+
+@media (max-width: 767px) {
+
+    .ShopPage .top h1,
+    .ShopPage .top p {
+        text-align: left;
+    }
+
+    .ShopPage .top,
+    .ShopPage .sortSection,
+    .ShopPage .filterSection {
+        padding: 17px !important;
+    }
+
+    .sortSection {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        width: 100% !important;
+    }
+
+    .sortSection>div {
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+
+    .sortSection>div p {
+        text-align: end;
+    }
+
+    .ShopPage .filterSection {
+        margin-top: 23px;
+    }
+}

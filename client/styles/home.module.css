@@ -1,0 +1,221 @@
+.Home .title {
+    font-size: 28px;
+    font-weight: bolder;
+    border-bottom: 1px solid rgb(214, 217, 218);
+    padding-bottom: 15px;
+    margin-bottom: 36px;
+    text-transform: uppercase;
+    color: var(--fs-color-primary);
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.Home .title::before {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 32px;
+    background-color: var(--fs-color-primary);
+}
+
+.Home .viewAllContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgb(214, 217, 218);
+    padding-bottom: 15px;
+    margin-bottom: 36px;
+}
+
+.Home .viewAllContainer .title {
+    border-bottom: none;
+    margin-bottom: 0px !important;
+}
+
+.Home .viewAllContainer a {
+    text-align: right;
+    width: 160px;
+    color: var(--fs-color-primary);
+}
+
+.Home section {
+    padding: 23px;
+}
+
+.Home .featuredParts,
+.Home .featuredProducts {
+    margin-top: 60px;
+}
+
+.featuredParts .ftImage {
+    height: 100% !important;
+}
+
+.Home .imagesContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 23px;
+    text-align: end;
+    margin-top: 100px;
+}
+
+.Home .imagesContainer img {
+    margin: 0px auto;
+    width: 100%;
+    max-width: 260px;
+}
+
+.Home .subTitle {
+    font-size: 21px;
+    font-weight: 600;
+    border-bottom: 1px solid rgb(214, 217, 218);
+    padding-bottom: 15px;
+    margin-bottom: 23px;
+}
+
+.Home .browseContainer {
+    padding: 36px;
+    position: relative;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.Home .browseContainer img {
+    width: 100%;
+}
+
+.Home .browseContainer p {
+    color: #000;
+    font-size: 17px;
+}
+
+.Home .browseContainer button {
+    max-width: 200px;
+}
+
+.Home .bgColor {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.54);
+    z-index: 1;
+}
+
+.Home div {
+    color: white;
+    font-size: 23px;
+    /* z-index: 10001 !important; */
+}
+
+.Home .textContainer {
+    margin-top: 80px;
+}
+
+.Home .textContainer .swiper {
+    height: 343px;
+}
+
+.Home .textContainer .swiperSlide {
+    margin-top: 60px;
+    text-align: center;
+    border: 1px solid rgb(230, 227, 227);
+    border-radius: 10px;
+    padding: 30px 10px;
+    height: 240px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.Home .textContainer .swiperSlide .icon {
+    margin: 0px auto;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px !important;
+    padding: 10px;
+    font-size: 60px;
+    color: white;
+    margin-bottom: 23px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Home .textContainer ul {
+    list-style: disc;
+    padding-left: 17px;
+}
+
+.Home .textContainer p,
+.Home .textContainer li {
+    color: #000;
+    font-size: 16px !important;
+    margin-bottom: 10px;
+}
+
+.Home .textContainer h3 {
+    color: #777;
+    font-size: 23px !important;
+    font-weight: 600;
+}
+
+.Home .emailListContainer {
+    position: relative;
+    margin: 60px 20px !important;
+}
+
+.Home .emailListContainer img {
+    width: 100%;
+}
+
+.Home .emailListContainer h2 {
+    /* color: white; */
+    font-size: 23px !important;
+    text-align: left;
+    margin-bottom: 10px !important;
+}
+
+.Home .emailListContainer form {
+    z-index: 10000 !important;
+    display: flex;
+    flex-direction: column;
+    row-gap: 19px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.Home .emailListContainer form label {
+    color: white;
+    font-size: 14px !important;
+    text-align: center;
+}
+
+.Home .emailListContainer form button {
+    margin-top: 15px;
+    max-width: 130px;
+}
+
+@media (max-width: 767px) {
+    .featuredParts {
+        margin-top: 15px !important;
+    }
+
+    .viewAllContainer {
+        align-items: flex-start !important;
+    }
+
+    .featuredParts .ftImage {
+        height: max-content !important;
+    }
+
+    .brands {
+        justify-content: center;
+    }
+
+    .brands img {
+        width: 130px !important;
+        height: 130px !important;
+    }
+}

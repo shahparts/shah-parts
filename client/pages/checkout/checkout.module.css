@@ -1,0 +1,113 @@
+.checkout {
+    color: black;
+}
+
+.checkout .title {
+    padding: 30px;
+    padding-top: 10px !important;
+    font-size: 43px;
+    font-weight: bolder;
+    border-bottom: 1px solid rgb(214, 217, 218);
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color: var(--fs-color-primary);
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.checkout .title::before {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 32px;
+    background-color: var(--fs-color-primary);
+}
+
+.checkout h2 {
+    font-size: 36px;
+    font-weight: 500 !important;
+    /* margin-bottom: 23px; */
+}
+
+.checkout form input {
+    border-radius: 8px !important;
+    background: #FFF !important;
+    padding: 0px 13px;
+    padding-left: 20px !important;
+    height: 48px;
+}
+
+.checkout .TextArea {
+    padding: 10px !important;
+    min-height: 160px;
+}
+
+.checkout label {
+    font-size: 21px !important;
+}
+
+.auth .form>div {
+    margin-bottom: 24px;
+}
+
+.checkout .right {
+    border-left: 1px solid #d9d9d9;
+}
+
+.checkout .right>div {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.checkout .right .promotionCode h5 {
+    font-size: 21px;
+    color: var(--text-secondary-color);
+    font-weight: 600;
+}
+
+.checkout .right h3 {
+    font-size: 23px;
+    color: var(--text-secondary-color);
+    font-weight: 600;
+    max-width: 200px;
+}
+
+.checkout .right .orderDetailItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.checkout .right .orderDetailItem h5 {
+    font-size: 21px;
+    color: var(--text-secondary-color);
+    font-weight: 600;
+    max-width: 130px;
+}
+
+.checkout .right .orderDetailItem .whatsApp {
+    font-size: 15px;
+    color: var(--text-secondary-color);
+    text-decoration: underline;
+    font-weight: 600;
+    max-width: 180px;
+}
+
+.checkout .right .orderDetailItem h5:nth-child(2) {
+    width: fit-content;
+}
+
+.checkout .right .orderDetailItem h5 span {
+    font-size: 19px;
+    color: var(--text-secondary-color);
+    font-weight: 400;
+}
+
+@media (max-width: 700px) {
+    .checkout .title {
+        padding: 17px !important;
+    }
+}

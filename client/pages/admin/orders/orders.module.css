@@ -1,0 +1,22 @@
+.orders .orderDetails {
+    display: flex;
+    flex-direction: column;
+    row-gap: 19px;
+}
+
+.orders .orderDetails .orderProducts div {
+    padding: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 19px;
+}
+
+.orders .orderProducts {
+    padding: 10px 0px;
+}
+
+.antBtn {
+    height: 48px !important;
+}

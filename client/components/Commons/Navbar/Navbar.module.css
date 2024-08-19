@@ -1,0 +1,29 @@
+.Navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 88px;
+    padding: 0px 15px;
+}
+
+.Navbar .logo img {
+    width: 100%;
+    max-width: 110px;
+}
+
+.Navbar .left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.Navbar .left .ovisBtn button {
+    padding: 6px 12px !important;
+    border-radius: 0px !important;
+}
+
+.Navbar .right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}

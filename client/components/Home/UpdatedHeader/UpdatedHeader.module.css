@@ -1,0 +1,141 @@
+.UpdatedHeader {
+    position: relative;
+    min-height: 260px;
+}
+
+.headerContainer {
+    transition: all 0s ease;
+}
+
+.sticky {
+    position: fixed;
+    top: -110px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sticky .searchBar {
+    margin-top: -110px;
+    width: 100%;
+}
+
+.sticky .searchBar .nav {
+    margin-top: -110px;
+}
+
+.sticky header {
+    margin-top: 100px;
+}
+
+
+.UpdatedHeader header {
+    padding: 19px !important;
+}
+
+.UpdatedHeader .right {
+    display: flex;
+    align-items: center;
+    gap: 23px;
+}
+
+.UpdatedHeader .logo img {
+    width: 130px !important;
+}
+
+.UpdatedHeader .searchBar {
+    transition: 0.3s all ease-in-out;
+}
+
+.UpdatedHeader .searchBar>div {
+    width: 100% !important;
+    justify-content: space-between;
+}
+
+.UpdatedHeader nav {
+    transition: 0.3s all ease-in-out;
+}
+
+.UpdatedHeader .searchBar>div {
+    padding: 10px 23px !important;
+}
+
+.UpdatedHeader .Divider {
+    height: 32px !important;
+    padding: 0px 10px !important;
+}
+
+.UpdatedHeader label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #222222;
+    /* width: 100%; */
+}
+
+.UpdatedHeader .select {
+    height: 30px !important;
+    min-width: 120px !important;
+    width: 100% !important;
+}
+
+.UpdatedHeader .select>div {
+    background-color: transparent !important;
+    border: none !important;
+    height: 30px !important;
+    padding-left: 0px !important;
+}
+
+.UpdatedHeader .select>div span {
+    font-size: 0.875rem !important;
+    color: #222222 !important;
+    font-weight: 200;
+}
+
+@media (min-width: 1400px) {
+    .UpdatedHeader .searchBar>div {
+        width: 60% !important;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 767px) {
+    .UpdatedHeader .logo img {
+        width: 100px !important;
+    }
+
+    .UpdatedHeader .right {
+        gap: 15px !important;
+    }
+
+    .searchBar>div {
+        border-radius: 0px !important;
+        row-gap: 23px;
+        align-items: flex-start;
+    }
+
+    .searchBar>div>div {
+        margin-left: 0px !important;
+        width: 100% !important;
+    }
+
+    .searchBar>div button {
+        width: 100% !important;
+        margin-left: 0px !important;
+    }
+
+    .searchBar>div>div .select {
+        width: 100% !important;
+        border: 1px solid rgb(210, 208, 208);
+        padding: 8px;
+        height: auto !important;
+        border-radius: 6px !important;
+        margin-top: 6px !important;
+    }
+
+    .searchBar .Divider {
+        display: none !important;
+    }
+}

@@ -1,0 +1,9 @@
+.ReviewsAndRatings .card>div {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}
+
+.ReviewsAndRatings textarea {
+    padding-top: 10px !important;
+}

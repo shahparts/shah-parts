@@ -1,0 +1,41 @@
+.BrandsPage {
+    margin: 0px;
+    padding: 40px;
+}
+
+.BrandsPage .title {
+    font-size: 43px;
+    font-weight: bolder;
+    border-bottom: 1px solid rgb(214, 217, 218);
+    padding-bottom: 15px;
+    margin-bottom: 36px;
+    text-transform: uppercase;
+    color: var(--fs-color-primary);
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.BrandsPage .title::before {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 32px;
+    background-color: var(--fs-color-primary);
+}
+
+.BrandsPage button {
+    font-size: 17px !important;
+}
+
+.BrandsPage img {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+@media (max-width: 700px) {
+
+    .BrandsPage .top h1 {
+        text-align: left;
+    }
+}

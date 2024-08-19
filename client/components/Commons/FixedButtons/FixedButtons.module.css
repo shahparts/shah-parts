@@ -1,0 +1,49 @@
+.FixedButtons {
+    position: fixed;
+    bottom: 180px;
+    right: 30px;
+    z-index: 10000 !important;
+    width: 64px;
+    height: 64px;
+    border-radius: 30px !important;
+    display: flex;
+    flex-direction: column;
+    row-gap: 19px;
+    isolation: isolate;
+}
+
+.FixedButtons a img {
+    border-radius: 10px !important;
+    width: 64px;
+    height: 64px;
+}
+
+.FixedButtons .whatsappBanner {
+    position: fixed;
+    left: 20px !important;
+    bottom: 20px !important;
+}
+
+.FixedButtons .whatsappBanner img {
+    width: max-content !important;
+}
+
+@media (max-width: 767px) {
+    .FixedButtons {
+        bottom: 121px !important;
+        right: 0px !important;
+    }
+
+    .FixedButtons .whatsappBanner {
+        left: 10px !important;
+    }
+
+    .FixedButtons .whatsappBanner img {
+        width: 180px !important;
+    }
+
+    .FixedButtons a img {
+        width: 43px !important;
+        height: 43px !important;
+    }
+}

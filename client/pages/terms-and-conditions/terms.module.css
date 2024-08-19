@@ -1,0 +1,33 @@
+.termsPage {
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 2em;
+    margin: 0;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.section p {
+    font-size: 1em;
+    line-height: 1.6;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1em;
+}

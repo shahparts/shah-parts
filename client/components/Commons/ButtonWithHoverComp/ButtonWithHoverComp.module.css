@@ -1,0 +1,16 @@
+.ButtonWithHoverComp {
+    width: 100%;
+    background-color: transparent;
+    border: 2px solid var(--fs-color-primary);
+    color: var(--fs-color-primary);
+    height: auto;
+    padding: 4px 15px;
+    border-radius: 0px;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.ButtonWithHoverComp:hover {
+    color: white !important;
+    background-color: var(--fs-color-primary);
+}

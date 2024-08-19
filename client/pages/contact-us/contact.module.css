@@ -1,0 +1,60 @@
+.contactPage {
+    background: #f5f5f5;
+}
+
+.contactPage h1 {
+    font-size: 28px;
+    font-weight: bolder;
+    border-bottom: 1px solid rgb(214, 217, 218);
+    padding-bottom: 15px;
+    margin-bottom: 36px;
+    text-transform: uppercase;
+    color: var(--fs-color-primary);
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    padding: 30px;
+    padding-top: 10px;
+}
+
+.contactPage h1::before {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 32px;
+    background-color: var(--fs-color-primary);
+}
+
+.contactPage p {
+    font-size: 19px !important;
+}
+
+.contactPage>div {
+    padding: 20px;
+}
+
+.formCol {
+    padding: 20px;
+}
+
+.form {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.form button {
+    background-color: var(--fs-color-primary) !important;
+    padding: 10px;
+    font-size: 23px;
+    margin-top: 23px !important;
+    height: auto;
+}
+
+.contactCards {
+    margin-top: 20px;
+}
+
+.contactCard {
+    text-align: center;
+}
