@@ -57,7 +57,7 @@ const Template = (
                 ${orderStatus ? `Your Order is ${orderStatus}!` : "we’re getting your order ready to be delivered!"}
                 </p>
                 <div class="btn" style="margin: 43px 0px;">
-                    <a href="https://shah-parts.vercel.app/user/orders" target="_blank">View Your Order</a>
+                    <a href="https://www.shahparts.com/user/orders" target="_blank">View Your Order</a>
                 </div>    
                 <footer>
                 <div class="bottom">
