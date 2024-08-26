@@ -3,6 +3,7 @@ import Footer from '@/components/Commons/Footer/Footer';
 import Navbar from '@/components/Commons/Navbar/Navbar';
 import SearchBar from '@/components/Commons/SearchBar/SearchBar';
 import TopMenu from '@/components/Commons/TopMenu/TopMenu';
+import logo from '../public/assets/logo.png';
 import { GlobalContextProvider } from '@/context/GlobalContext';
 import Head from 'next/head';
 import 'swiper/css';
@@ -21,6 +22,7 @@ function MyApp({ Component, pageProps }) {
         <>
             <Head>
                 <title>Shah Parts</title>
+                <link href="../public/assets/logo.png"></link>
             </Head>
             <GlobalContextProvider>
                 <CartProvider>

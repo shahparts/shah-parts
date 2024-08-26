@@ -3,7 +3,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import sliderImg1 from "../../../public/assets/imgpsh_fullsize-2.png"
-import sliderImg2 from "../../../public/assets/car.jpg"
+import sliderImg2 from "../../../public/assets/warehouse.jpg"
 // import whatsApp from "../../../public/assets/whatsapp123.jpg"
 import stripesBanner from "../../../public/assets/Stripes-Banner.jpg"
 import Image from 'next/image';
@@ -20,7 +20,7 @@ const Header = () => {
                 slidesPerView={1}
                 navigation={true}
                 autoplay={{
-                    delay: 200000,
+                    delay: 5000,
                     disableOnInteraction: true,
                 }}
                 loop={true}
@@ -37,11 +37,11 @@ const Header = () => {
                         <Image src={sliderImg1} alt="Engine Banner" />
                     </Link>
                 </SwiperSlide>
-                {/* <SwiperSlide>
+                <SwiperSlide className={styles.swiperSlide}>
                     <Link href="/">
-                        <Image src={sliderImg2} alt="Engine Banner" />
+                        <Image src={sliderImg2} alt="Engine Banner2" />
                     </Link>
-                </SwiperSlide> */}
+                </SwiperSlide>
                 {/* <SwiperSlide>
                     <Link href="/">
                         <Image src={sliderImg1} alt="Engine Banner" />
