@@ -115,7 +115,9 @@ const Home = () => {
                   <Col xs={24} md={12} lg={8} xl={6} className='text-left cursor-pointer' onClick={() => handleReferCategoryToShop(data?.link)} key={index}>
                     <h3 className={styles.subTitle}>{data?.title}</h3>
                     <Image
-                      style={{ width: "100%" }}
+                      style={{ 
+                        width: "70%"
+                      }}
                       width={200}
                       height={200}
                       src={data?.image}
