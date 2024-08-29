@@ -26,6 +26,7 @@
     "react-quill": "^2.0.0",
     "react-responsive-carousel": "^3.2.23",
     "react-select-country-list": "^2.2.3",
+    "sitemap": "^8.0.0",
     "swiper": "^11.1.4"
   },
   "devDependencies": {
