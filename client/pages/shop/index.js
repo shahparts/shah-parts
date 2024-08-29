@@ -35,6 +35,9 @@ const ShopPage = () => {
         if (router?.query?.Make) {
           setFilterValuesFun(router?.query?.Make);
         }
+        if (router?.query?.Model) {
+          setFilterValuesFun(router?.query?.Make, router?.query?.Model);
+        }
         if (router?.query?.Part) {
           setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, router?.query?.Part)
         }
