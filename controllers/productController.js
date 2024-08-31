@@ -64,8 +64,8 @@ exports.getLimitedProducts = async (req, res) => {
       query.Title = { $regex: regex };
     }
 
-    if (req.body.PartAccessory) {
-      query.PartAccessorries = req.body.PartAccessory;
+    if (req.body.PartAccessorries) {
+      query.PartAccessorries = req.body.PartAccessorries;
     }
 
     if (minPrice && maxPrice) {

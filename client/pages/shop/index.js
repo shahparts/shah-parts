@@ -32,14 +32,16 @@ const ShopPage = () => {
         setProductsArray(res.data?.products);
         setTotalCount(res.data.count);
         let firstProduct = res.data.products[0];
-        if (router?.query?.Make) {
-          setFilterValuesFun(router?.query?.Make);
-        }
-        if (router?.query?.Model) {
-          setFilterValuesFun(router?.query?.Make, router?.query?.Model);
-        }
-        if (router?.query?.Part) {
+        // if (router?.query?.Make) {
+        //   setFilterValuesFun(router?.query?.Make);
+        // }
+        // if (router?.query?.Model) {
+        //   setFilterValuesFun(router?.query?.Make, router?.query?.Model);
+        // }
+        if (!router?.query?.Model && router?.query?.Part) {
           setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, router?.query?.Part)
+        } else {
+          setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.partAccessory);
         }
       }
       else {
@@ -86,23 +88,28 @@ const ShopPage = () => {
   useEffect(() => {
     getAllParts();
     getAllMakes();
-    if (router.query?.Make) {
-      setMake(router.query?.Make)
-    }
-    if (router.query?.Model) {
-      setModel(router.query?.Model)
-    }
-    if (router.query?.Part) {
-      setPart(router.query?.Part)
-    }
-    if (router.query?.PartAccessory) {
-      setPartAccessory(router.query?.PartAccessory)
-    }
+    setMake(router.query?.Make)
+    setModel(router.query?.Model)
+    setPart(router.query?.Part)
+    setPartAccessory(router.query?.PartAccessory)
+
+    // if (router.query?.Make) {
+    //   setMake(router.query?.Make)
+    // }
+    // if (router.query?.Model) {
+    //   setModel(router.query?.Model)
+    // }
+    // if (router.query?.Part) {
+    //   setPart(router.query?.Part)
+    // }
+    // if (router.query?.PartAccessory) {
+    //   setPartAccessory(router.query?.PartAccessory)
+    // }
 
     return () => {
 
     }
-  }, [router.query]);
+  }, [router.asPath]);
 
   useEffect(() => {
     getAllData();
@@ -117,6 +124,8 @@ const ShopPage = () => {
   const handleSortChange = (value) => {
     setSortValue(value);
   };
+
+  console.log(router.query);
 
   return (
     <div className={styles.ShopPage}>

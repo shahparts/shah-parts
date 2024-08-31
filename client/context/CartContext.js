@@ -74,7 +74,7 @@ export function CartProvider({ children }) {
             }
         }).catch(err => {
             console.log(err)
-            ErrorAlert(err?.message);
+            // ErrorAlert(err?.message);
         })
     }
 
