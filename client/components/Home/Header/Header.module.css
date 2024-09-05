@@ -1,6 +1,7 @@
 .Header img {
     width: 100%;
     aspect-ratio: 2/1;
+    
 }
 
 .Header .swiperSlide {
@@ -8,6 +9,9 @@
     /* display: flex;
     justify-content: center; */
     margin-bottom: 20px;
+    padding-left: 15%;
+    padding-right: 15%;
+    
     /* height: 600px; */
 }
 

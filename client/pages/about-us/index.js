@@ -60,6 +60,13 @@ const AboutPage = () => {
                 <h2>Why Choose Us</h2>
                 <p>Choosing Shah Parts means choosing a partner who values quality, authenticity, and customer satisfaction. We are dedicated to providing you with the best parts and service, making us your go-to source for Japanese vehicle parts.</p>
             </section>
+            
+            <section className={styles.section}>
+            <h2>Disclaimer</h2>
+            <p>
+                We source our listed parts from Japan wide private network of dismantling companies, scrap yards and of course direct from private sellers. Some of our inventory is also listed on other networks. So there are instances, item you are looking for is already sold. That's why we recommend contacting us before order.
+            </p>
+            </section>
 
             <footer className={styles.footer}>
                 <p>Thank you for visiting Shah Parts. We are excited to help you find the perfect parts for your vehicle and look forward to serving you in the future.</p>

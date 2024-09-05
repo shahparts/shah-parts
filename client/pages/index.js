@@ -13,7 +13,7 @@ import { ButtonComp } from '@/components/Commons/ButtonComp/ButtonComp';
 import { useRouter } from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
-import { CarOutlined, DeliveredProcedureOutlined, DollarCircleOutlined, GlobalOutlined, PhoneFilled, SearchOutlined } from '@ant-design/icons';
+import { AlignCenterOutlined, CarOutlined, DeliveredProcedureOutlined, DollarCircleOutlined, GlobalOutlined, PhoneFilled, SearchOutlined } from '@ant-design/icons';
 import { useGlobalContext } from '@/context/GlobalContext';
 
 const Home = () => {
@@ -78,7 +78,7 @@ const Home = () => {
       image: "https://storage.googleapis.com/shah-parts/categories/Suspension.jpg"
     },
     {
-      title: "LIGHT SECTION",
+      title: "Lights",
       link: "Lightings",
       image: "https://storage.googleapis.com/shah-parts/categories/lighting.jpg"
     },
@@ -108,18 +108,19 @@ const Home = () => {
             <h1 className={`${styles.title} mainTitle`}>Featured auto parts categories</h1>
             <Link href="/categories">View All &gt;</Link>
           </div>
-          <Row gutter={[40, 40]}>
+          <Row style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             {
               featuredData?.map((data, index) => {
+
                 return (
-                  <Col xs={24} md={12} lg={8} xl={6} className='text-left cursor-pointer' onClick={() => handleReferCategoryToShop(data?.link)} key={index}>
+                  <Col xs={24} md={12} lg={8} xl={6} className='text-center cursor-pointer' onClick={() => handleReferCategoryToShop(data?.link)} key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <h3 className={styles.subTitle}>{data?.title}</h3>
                     <Image
                       style={{ 
-                        width: "70%"
+                        width: "50%"
                       }}
-                      width={200}
-                      height={200}
+                      width={100}
+                      height={100}
                       src={data?.image}
                       className={styles?.ftImage}
                       alt=""
@@ -136,7 +137,7 @@ const Home = () => {
             <Image width={130} className="w-[60px] md:w-[130px]" src={featuredBadge} alt="Featured Banner" />
           </div>
           <Swiper
-            spaceBetween={50}
+            spaceBetween={30}
             slidesPerView={1}
             navigation={true}
             autoplay={{
@@ -147,16 +148,16 @@ const Home = () => {
             modules={[Navigation, Autoplay]}
             breakpoints={{
               640: {
-                slidesPerView: 1,
+                slidesPerView: 2,
                 spaceBetween: 20,
               },
               768: {
-                slidesPerView: 2,
-                spaceBetween: 40,
+                slidesPerView: 3,
+                spaceBetween: 30,
               },
               1024: {
                 slidesPerView: 4,
-                spaceBetween: 50,
+                spaceBetween: 30,
               },
             }}
           >

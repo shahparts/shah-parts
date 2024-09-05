@@ -75,10 +75,10 @@
     /* width: 100%; */
 }
 
-.UpdatedHeader .select {
+.UpdatedHeader .select{
     height: 30px !important;
-    min-width: 120px !important;
-    width: 100% !important;
+    min-width: 150px !important;
+    width: auto !important;
 }
 
 .UpdatedHeader .select>div {
