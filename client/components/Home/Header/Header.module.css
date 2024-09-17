@@ -1,7 +1,6 @@
 .Header {
     position: relative;
     overflow: visible;
-    background: linear-gradient(135deg, #1f1c2c, #3a1c71); /* Background gradient */
     padding: 20px 0; /* Adjust padding as needed */
 }
 
