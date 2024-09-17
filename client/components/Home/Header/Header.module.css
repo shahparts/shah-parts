@@ -1,30 +1,99 @@
-.Header img {
-    width: 100%;
-    aspect-ratio: 2/1;
-    
+.Header {
+    position: relative;
+    overflow: visible;
+    background: linear-gradient(135deg, #1f1c2c, #3a1c71); /* Background gradient */
+    padding: 20px 0; /* Adjust padding as needed */
 }
 
 .Header .swiperSlide {
-    width: 100% !important;
-    /* display: flex;
-    justify-content: center; */
-    margin-bottom: 20px;
-    padding-left: 15%;
-    padding-right: 15%;
+    width: auto; /* Allow the slide width to be determined by the image */
+    margin: 0 auto; /* Center the slide horizontally */
+    padding: 0 10%; /* Add padding if needed */
+    position: relative;
+    border-radius: 25px;
+    overflow: visible; /* Ensure no overflow */
     
-    /* height: 600px; */
 }
 
-.Header .swiper {
-    z-index: 100 !important;
-    /* height: 100vh; */
+.Header .swiperSlide img {
+    width: 80%; /* Adjust to make the image smaller */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: block; /* Ensure image is a block element */
+    margin: 0 auto; /* Center the image horizontally */
 }
 
-.Header .swiper .swiperSlide {
-    /* height: 100vh !important; */
+.Header .swiperSlide:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 }
 
-.Header .swiper .swiperSlide img {
+.Header .swiperSlide:before {
+    content: "";
+    position: relative;
+    top: 0;
+    left: 0;
     width: 100%;
-    /* height: 100vh !important; */
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    
+}
+
+.Header .swiperSlide:hover:before {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.Header .text {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #ffffff; /* Use a light color to contrast against dark backgrounds */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5em;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better contrast */
+    padding: 10px; /* Add padding to the text background */
+    border-radius: 5px; /* Rounded corners for a better look */
+    z-index: 3;
+    pointer-events: none; /* Prevents text from blocking interactions */
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8); /* Enhance text shadow for better visibility */
+}
+
+
+.Header .button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    background: #1dbf73;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    z-index: 3;
+}
+
+.Header .button:hover {
+    background: #1aa64f;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .Header .swiperSlide {
+        padding: 0 5%;
+    }
+
+    .Header .text {
+        font-size: 1em;
+    }
+
+    .Header .button {
+        font-size: 0.9em;
+        padding: 8px 16px;
+    }
 }
