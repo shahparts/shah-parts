@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import sliderImg1 from "../../../public/assets/imgpsh_fullsize-2.png"
+import sliderImg1 from "../../../public/assets/imgpsh_fullsize-2.jpg"
 import sliderImg2 from "../../../public/assets/warehouse.jpg"
 import sliderImg3 from "../../../public/assets/1.jpg"
 import sliderImg4 from "../../../public/assets/2.jpg"
