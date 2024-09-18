@@ -1,4 +1,5 @@
 import { isAuthenticated } from '@/components/Commons/Auth/Auth';
+import { debounce } from 'lodash';
 import { useRouter } from 'next/router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
@@ -6,9 +7,20 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const GlobalContext = createContext();
 
 export function GlobalContextProvider({ children }) {
+    function generateRandomId(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+
+        return result;
+    }
     const router = useRouter();
     const [userAuth, setUserAuth] = useState({});
-    const [updateData, setUpdateData] = useState(false);
+    const [updateData, setUpdateData] = useState("");
     const [make, setMake] = useState("");
     const [model, setModel] = useState("");
     const [part, setPart] = useState("");
@@ -24,13 +36,14 @@ export function GlobalContextProvider({ children }) {
     }, []);
 
 
-    const setFilterValuesFun = (mk, mdl, prt, prtaccry) => {
-        setUpdateData(false);
+    const setFilterValuesFun = async (mk, mdl, prt, prtaccry) => {
+        const randomId = generateRandomId(10);
         setMake(mk);
         setModel(mdl);
         setPart(prt);
         setPartAccessorries(prtaccry);
-        setUpdateData(true);
+        const debouncedUpdate = debounce(() => setUpdateData(randomId), 100);
+        debouncedUpdate();
     }
 
     useEffect(() => {

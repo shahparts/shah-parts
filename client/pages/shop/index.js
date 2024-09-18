@@ -56,7 +56,7 @@ const ShopPage = () => {
     return () => {
       debouncedGetAllData.cancel();
     };
-  }, [make, model, part, partAccessorries, current, sortValue]);
+  }, [updateData, current, sortValue]);
 
 
   const handleSortChange = (value) => {
