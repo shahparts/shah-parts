@@ -1,16 +1,15 @@
 import { ErrorAlert } from '@/components/Commons/Messages/Messages';
 import { Col, Pagination, Row, Select } from 'antd';
 import axios from 'axios';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './shop.module.css';
 import Loading from '@/components/Commons/Loading/Loading';
 import { ProductCard } from '@/components/Commons/ProductCard/ProductCard';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { debounce } from 'lodash'; 
+import { debounce } from 'lodash';
 
 const ShopPage = () => {
-  const router = useRouter();
+  const hasRun = useRef(false);
   const {
     setFilterValuesFun,
     make,
@@ -59,11 +58,11 @@ const ShopPage = () => {
 
   useEffect(() => {
     const updateGlobalState = () => {
-      if (productsArray?.length > 0) {
+      if (productsArray?.length > 0 && !hasRun.current) {
         let firstProduct = productsArray[0];
-        if (router?.query?.Part && (!router?.query?.Model && !router?.query?.Make && !router?.query?.partAccessory)) {
-          console.log("called with");
-          setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, router?.query?.Part, "", "NoRefresh")
+        if (part && (!model && !make && !partAccessorries)) {
+          setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, part, "", "NoRefresh");
+          hasRun.current = true;
         }
       }
     }
