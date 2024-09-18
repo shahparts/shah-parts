@@ -116,7 +116,7 @@ const Home = () => {
                   <Col xs={24} md={12} lg={8} xl={6} className='text-center cursor-pointer' onClick={() => handleReferCategoryToShop(data?.link)} key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <h3 className={styles.subTitle}>{data?.title}</h3>
                     <Image
-                      style={{ 
+                      style={{
                         width: "50%"
                       }}
                       width={100}
