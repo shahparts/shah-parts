@@ -7,7 +7,7 @@ import styles from './shop.module.css';
 import Loading from '@/components/Commons/Loading/Loading';
 import { ProductCard } from '@/components/Commons/ProductCard/ProductCard';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { debounce } from 'lodash';  // Install lodash if not already
+import { debounce } from 'lodash'; 
 
 const ShopPage = () => {
   const router = useRouter();
@@ -22,7 +22,6 @@ const ShopPage = () => {
   const [productsArray, setProductsArray] = useState([]);
   const [sortValue, setSortValue] = useState("createdAt");
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState({});
   const [totalCount, setTotalCount] = useState();
   const [current, setCurrent] = useState(1);
 
@@ -33,11 +32,6 @@ const ShopPage = () => {
       if (res.status === 200) {
         setProductsArray(res.data?.products);
         setTotalCount(res.data.count);
-        let firstProduct = res.data.products[0];
-        if (router?.query?.Part && (!router?.query?.Model && !router?.query?.Make && !router?.query?.partAccessory)) {
-          console.log("called with");
-          setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, router?.query?.Part)
-        }
       }
       else {
         ErrorAlert(res.data.errorMessage);
@@ -62,6 +56,25 @@ const ShopPage = () => {
   const handleSortChange = (value) => {
     setSortValue(value);
   };
+
+  useEffect(() => {
+    const updateGlobalState = () => {
+      if (productsArray?.length > 0) {
+        let firstProduct = productsArray[0];
+        if (router?.query?.Part && (!router?.query?.Model && !router?.query?.Make && !router?.query?.partAccessory)) {
+          console.log("called with");
+          setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, router?.query?.Part, "", "NoRefresh")
+        }
+      }
+    }
+    const debouncedUpdateGlobalState = debounce(() => updateGlobalState(), 1000);
+    debouncedUpdateGlobalState();
+
+    return () => {
+      debouncedUpdateGlobalState.cancel();
+    };
+  }, [productsArray]);
+
 
   return (
     <div className={styles.ShopPage}>

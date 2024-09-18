@@ -36,37 +36,27 @@ export function GlobalContextProvider({ children }) {
     }, []);
 
 
-    const setFilterValuesFun = async (mk, mdl, prt, prtaccry) => {
+    const setFilterValuesFun = async (mk, mdl, prt, prtaccry, NoRefresh) => {
         const randomId = generateRandomId(10);
         setMake(mk);
         setModel(mdl);
         setPart(prt);
         setPartAccessorries(prtaccry);
-        setUpdateData(randomId);
-        // const debouncedUpdate = debounce(() => setUpdateData(randomId), 100);
-        // debouncedUpdate();
+        if (NoRefresh !== "NoRefresh") {
+            setUpdateData(randomId);
+        }
     }
+
 
     useEffect(() => {
         console.log("context query", router?.query);
-        const debouncedUpdateState = debounce(() => setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.PartAccessory), 300);
-        debouncedUpdateState();
+        setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.PartAccessory);
+
 
         return () => {
-            debouncedUpdateState.cancel();
-        };
+
+        }
     }, [router.query]);
-
-
-    // useEffect(() => {
-    //     console.log("context query", router?.query);
-    //     setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.PartAccessory);
-
-
-    //     return () => {
-
-    //     }
-    // }, [router.query]);
 
 
     return (
