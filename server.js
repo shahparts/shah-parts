@@ -13,7 +13,7 @@ const app = express();
 
 /******************************************  MiddleWares  ********************************************/
 app.use(express.json({ limit: "4000mb" }));
-app.use(express.static('client/out'));
+// app.use(express.static('client/out'));
 app.use(cors({ origin: ["http://localhost:3000", "https://shah-parts.vercel.app", "https://www.shahparts.com", "https://shahparts.com"] }));
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: true }));
@@ -32,12 +32,12 @@ mongoose.connect(config.MONGO_URI, {
 }).then(() => console.log('MongoDb Connected')).catch(err => console.log(err));
 
 
-app.get("/server", (req, res) => {
+app.get("/api/server", (req, res) => {
     res.send("Server is running...")
 });
 
-app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'out', 'index.html'));
-});
+// app.get('/*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'client', 'out', 'index.html'));
+// });
 
 app.listen(process.env.PORT || 8000, () => console.log('Listening to port 8000'));

@@ -7,24 +7,28 @@ import styles from './shop.module.css';
 import Loading from '@/components/Commons/Loading/Loading';
 import { ProductCard } from '@/components/Commons/ProductCard/ProductCard';
 import { useGlobalContext } from '@/context/GlobalContext';
+import { debounce } from 'lodash';  // Install lodash if not already
 
 const ShopPage = () => {
   const router = useRouter();
-  const { setFilterValuesFun } = useGlobalContext();
+  const {
+    setFilterValuesFun,
+    make,
+    model,
+    part,
+    partAccessorries,
+    updateData
+  } = useGlobalContext();
   const [productsArray, setProductsArray] = useState([]);
   const [sortValue, setSortValue] = useState("createdAt");
-  const [make, setMake] = useState(router.query.Make);
-  const [part, setPart] = useState(router.query.Part);
-  const [model, setModel] = useState(router.query.Model);
-  const [partAccessory, setPartAccessory] = useState(router.query.PartAccessory);
   const [loading, setLoading] = useState(false);
-  const [updated, setUpdated] = useState();
+  const [filters, setFilters] = useState({});
   const [totalCount, setTotalCount] = useState();
   const [current, setCurrent] = useState(1);
 
   const getAllData = async () => {
     setLoading(true);
-    await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, { page: current - 1, pageSize: "20", Make: make, Model: model, Part: part, PartAccessorries: partAccessory, sortBy: sortValue }).then(res => {
+    await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, { page: current - 1, pageSize: "20", Make: make, Model: model, Part: part, PartAccessorries: partAccessorries, sortBy: sortValue }).then(res => {
       setLoading(false);
       if (res.status === 200) {
         setProductsArray(res.data?.products);
@@ -33,10 +37,6 @@ const ShopPage = () => {
         if (router?.query?.Part && (!router?.query?.Model && !router?.query?.Make && !router?.query?.partAccessory)) {
           console.log("called with");
           setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, router?.query?.Part)
-        }
-        if (router.query?.Make !== undefined && router.query?.Model !== undefined) {
-          console.log("get func", router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.partAccessory)
-          // setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.partAccessory);
         }
       }
       else {
@@ -48,25 +48,15 @@ const ShopPage = () => {
     });
   }
 
-  useEffect(() => {
-    setMake(router.query?.Make)
-    setModel(router.query?.Model)
-    setPart(router.query?.Part)
-    setPartAccessory(router.query?.PartAccessory);
-    setUpdated(router.query);
-
-    return () => {
-
-    }
-  }, [router.asPath]);
 
   useEffect(() => {
-    getAllData();
+    const debouncedGetAllData = debounce(() => getAllData(), 300);
+    debouncedGetAllData();
 
     return () => {
-
-    }
-  }, [current, updated, sortValue]);
+      debouncedGetAllData.cancel();
+    };
+  }, [make, model, part, partAccessorries, current, sortValue]);
 
 
   const handleSortChange = (value) => {
