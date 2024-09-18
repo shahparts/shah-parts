@@ -42,19 +42,31 @@ export function GlobalContextProvider({ children }) {
         setModel(mdl);
         setPart(prt);
         setPartAccessorries(prtaccry);
-        const debouncedUpdate = debounce(() => setUpdateData(randomId), 100);
-        debouncedUpdate();
+        setUpdateData(randomId);
+        // const debouncedUpdate = debounce(() => setUpdateData(randomId), 100);
+        // debouncedUpdate();
     }
 
     useEffect(() => {
-        console.log(router?.query?.Make);
-        setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.PartAccessory);
-
+        console.log("context query", router?.query);
+        const debouncedUpdateState = debounce(() => setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.PartAccessory), 300);
+        debouncedUpdateState();
 
         return () => {
-
-        }
+            debouncedUpdateState.cancel();
+        };
     }, [router.query]);
+
+
+    // useEffect(() => {
+    //     console.log("context query", router?.query);
+    //     setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.PartAccessory);
+
+
+    //     return () => {
+
+    //     }
+    // }, [router.query]);
 
 
     return (

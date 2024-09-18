@@ -50,7 +50,7 @@ const ShopPage = () => {
 
 
   useEffect(() => {
-    const debouncedGetAllData = debounce(() => getAllData(), 300);
+    const debouncedGetAllData = debounce(() => getAllData(), 700);
     debouncedGetAllData();
 
     return () => {
