@@ -100,9 +100,9 @@
         justify-content: space-between;
     }
 
-    .UpdatedHeader .sticky .searchBar>div {
+    /* .UpdatedHeader .sticky .searchBar>div {
         margin-right: 10% !important;
-    }
+    } */
 }
 
 @media (max-width: 767px) {
