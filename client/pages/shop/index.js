@@ -13,35 +13,30 @@ const ShopPage = () => {
   const { setFilterValuesFun } = useGlobalContext();
   const [productsArray, setProductsArray] = useState([]);
   const [sortValue, setSortValue] = useState("createdAt");
-  const [parts, setParts] = useState([]);
-  const [makes, setMakes] = useState([]);
   const [make, setMake] = useState(router.query.Make);
   const [part, setPart] = useState(router.query.Part);
   const [model, setModel] = useState(router.query.Model);
   const [partAccessory, setPartAccessory] = useState(router.query.PartAccessory);
-  const [priceRange, setPriceRange] = useState();
   const [loading, setLoading] = useState(false);
+  const [updated, setUpdated] = useState();
   const [totalCount, setTotalCount] = useState();
   const [current, setCurrent] = useState(1);
 
   const getAllData = async () => {
     setLoading(true);
-    await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, { page: current - 1, pageSize: "20", priceRange, Make: make, Model: model, Part: part, PartAccessorries: partAccessory, sortBy: sortValue }).then(res => {
+    await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, { page: current - 1, pageSize: "20", Make: make, Model: model, Part: part, PartAccessorries: partAccessory, sortBy: sortValue }).then(res => {
       setLoading(false);
       if (res.status === 200) {
         setProductsArray(res.data?.products);
         setTotalCount(res.data.count);
         let firstProduct = res.data.products[0];
-        // if (router?.query?.Make) {
-        //   setFilterValuesFun(router?.query?.Make);
-        // }
-        // if (router?.query?.Model) {
-        //   setFilterValuesFun(router?.query?.Make, router?.query?.Model);
-        // }
-        if (!router?.query?.Model && router?.query?.Part) {
+        if (router?.query?.Part && (!router?.query?.Model && !router?.query?.Make && !router?.query?.partAccessory)) {
+          console.log("called with");
           setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, router?.query?.Part)
-        } else {
-          setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.partAccessory);
+        }
+        if (router.query?.Make !== undefined && router.query?.Model !== undefined) {
+          console.log("get func", router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.partAccessory)
+          // setFilterValuesFun(router?.query?.Make, router?.query?.Model, router?.query?.Part, router?.query?.partAccessory);
         }
       }
       else {
@@ -53,79 +48,30 @@ const ShopPage = () => {
     });
   }
 
-  const getAllParts = async () => {
-    setLoading(true);
-    await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/parts`).then((res) => {
-      setLoading(false);
-      if (res.status === 200) {
-        setParts(res.data?.map(f => ({ value: f?.part, label: f?.part })));
-      }
-      else {
-        ErrorAlert(res.data.errorMessage);
-      }
-    }).catch(err => {
-      setLoading(false);
-      console.log(err)
-    });
-  }
-
-  const getAllMakes = async () => {
-    setLoading(true);
-    await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/makes`).then((res) => {
-      setLoading(false);
-      if (res.status === 200) {
-        setMakes(res.data?.map(f => ({ value: f?.make, label: f?.make })));
-      }
-      else {
-        ErrorAlert(res.data.errorMessage);
-      }
-    }).catch(err => {
-      setLoading(false);
-      console.log(err)
-    });
-  }
-
   useEffect(() => {
-    getAllParts();
-    getAllMakes();
     setMake(router.query?.Make)
     setModel(router.query?.Model)
     setPart(router.query?.Part)
-    setPartAccessory(router.query?.PartAccessory)
-
-    // if (router.query?.Make) {
-    //   setMake(router.query?.Make)
-    // }
-    // if (router.query?.Model) {
-    //   setModel(router.query?.Model)
-    // }
-    // if (router.query?.Part) {
-    //   setPart(router.query?.Part)
-    // }
-    // if (router.query?.PartAccessory) {
-    //   setPartAccessory(router.query?.PartAccessory)
-    // }
+    setPartAccessory(router.query?.PartAccessory);
+    setUpdated(router.query);
 
     return () => {
 
     }
-  }, [router.query]);
+  }, [router.asPath]);
 
   useEffect(() => {
     getAllData();
-    // console.log("Shop page", make, model, part, partAccessory)
 
     return () => {
 
     }
-  }, [current, make, model, partAccessory, part, priceRange, sortValue]);
+  }, [current, updated, sortValue]);
 
 
   const handleSortChange = (value) => {
     setSortValue(value);
   };
-
-  console.log(router.query);
 
   return (
     <div className={styles.ShopPage}>

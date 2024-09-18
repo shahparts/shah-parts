@@ -21,7 +21,6 @@ export function GlobalContextProvider({ children }) {
     }, []);
 
     const setFilterValuesFun = (mk, mdl, prt, prtaccry) => {
-        console.log(mk, mdl, prt, prtaccry);
         setMake(mk);
         setModel(mdl);
         setPart(prt);

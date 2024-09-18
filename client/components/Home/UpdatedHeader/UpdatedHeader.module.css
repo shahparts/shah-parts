@@ -59,7 +59,7 @@
 }
 
 .UpdatedHeader .searchBar>div {
-    padding: 10px 23px !important;
+    padding: 10px 17px !important;
 }
 
 .UpdatedHeader .Divider {
@@ -98,6 +98,10 @@
     .UpdatedHeader .searchBar>div {
         width: max-content !important;
         justify-content: space-between;
+    }
+
+    .UpdatedHeader .sticky .searchBar>div {
+        margin-right: 10% !important;
     }
 }
 
