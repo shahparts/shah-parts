@@ -61,6 +61,7 @@ export const generateSeoData = (product) => {
         metaTags: [
             { name: 'description', content: description },
             { name: 'keywords', content: 'Japanese car parts, used car parts, JDM parts' },
+            { name: 'robots', content: 'index, follow' },
             { property: 'og:title', content: title },
             { property: 'og:description', content: description },
             { property: 'og:type', content: 'website' },

@@ -75,7 +75,7 @@
     /* width: 100%; */
 }
 
-.UpdatedHeader .select{
+.UpdatedHeader .select {
     height: 30px !important;
     min-width: 150px !important;
     width: auto !important;
@@ -96,7 +96,7 @@
 
 @media (min-width: 1400px) {
     .UpdatedHeader .searchBar>div {
-        width: 60% !important;
+        width: max-content !important;
         justify-content: space-between;
     }
 }

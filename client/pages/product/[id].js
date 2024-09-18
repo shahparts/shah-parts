@@ -77,14 +77,11 @@ const ProductPage = () => {
     }
 
     useEffect(() => {
-        if (productId) {
+        console.log('Product ID:', productId);
+        if (router.isReady && productId) {
             getProduct(productId);
         }
-
-        return () => {
-
-        }
-    }, [productId]);
+    }, [router.isReady, productId]);
 
 
 

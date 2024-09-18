@@ -109,7 +109,7 @@ const ShopPage = () => {
     return () => {
 
     }
-  }, [router.asPath]);
+  }, [router.query]);
 
   useEffect(() => {
     getAllData();
