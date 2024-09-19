@@ -2,7 +2,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import sliderImg1 from "../../../public/assets/imgpsh_fullsize-2.jpg"
 import sliderImg2 from "../../../public/assets/warehouse.jpg"
 import sliderImg3 from "../../../public/assets/1.jpg"
 import sliderImg4 from "../../../public/assets/2.jpg"
@@ -35,18 +34,6 @@ const Header = () => {
                 className={styles.swiper}
                 modules={[Pagination, Navigation, Autoplay]}
             >
-                <SwiperSlide className={styles.swiperSlide}>
-                    <Link href="/">
-                        <Image 
-                            src={sliderImg1}
-                            alt="Engine Banner" 
-                            width={1000} // Replace with the actual width of your image
-                            height={100} // Replace with the actual height of your image
-                            className={styles.image} 
-                        />
-                        <div className={styles.text}>👋 Welcome to SHAH PARTS</div>
-                    </Link>
-                </SwiperSlide>
                 <SwiperSlide className={styles.swiperSlide}>
                     <Link href="/">
                         <Image 
