@@ -99,6 +99,11 @@ const Home = () => {
     }
   };
 
+  const specificBrands = brands.filter((brand) => {
+    const make = brand.make.toUpperCase();
+    return make === 'TOYOTA' || make === 'HONDA' || make === 'NISSAN' || make === 'BMW' || make === "DAIHATSU";
+  });
+
   return (
     <div className={`${styles.Home} home`}>
       <main className="pb-8">
@@ -174,21 +179,23 @@ const Home = () => {
         </section>
         <section className="mt-[60px]">
           <div className={styles.viewAllContainer}>
-            <h1 className={`${styles.title} mainTitle`}>car auto parts by brands</h1>
+            <h1 className={`${styles.title} mainTitle`}>Car Auto Parts by Brands</h1>
             <Link href="/brands">View All &gt;</Link>
           </div>
-          <div className={`${styles.brands} flex gap-10 flex-wrap`}>
-            {
-              brands?.map((brand, index) => {
-                return (
-                  <div className="border-2 border-[rgba(244,244,244,1)]" key={index}>
-                    <Link key={index} href={`/shop?Make=${brand?.make?.toUpperCase()}`}>
-                      <Image src={brand?.image} alt={brand?.make} width={200} height={200} style={{ height: "180px", objectFit: "contain" }} />
-                    </Link>
-                  </div>
-                )
-              })
-            }
+          <div className={`${styles.brands} flex gap-10 flex-wrap justify-between`}>
+            {specificBrands.map((brand, index) => (
+              <div className="flex-1 flex justify-center items-center border-[rgba(244,244,244,1)]" key={index}>
+                <Link href={`/shop?Make=${brand.make}`} key={index}>
+                  <Image 
+                    src={brand.image} 
+                    alt={brand.make} 
+                    width={200} 
+                    height={200} 
+                    style={{ height: "180px", objectFit: "contain" }} 
+                  />
+                </Link>
+              </div>
+            ))}
           </div>
         </section>
         <section className="mt-4 md:mt-[60px]">

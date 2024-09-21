@@ -219,3 +219,42 @@
         height: 130px !important;
     }
 }
+
+.brands {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .brands > div {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(244, 244, 244, 1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .brands > div:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .viewAllContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .viewAllContainer a {
+    color: #0070f3;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .viewAllContainer a:hover {
+    color: #0056b3;
+  }
+  
