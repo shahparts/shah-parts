@@ -190,6 +190,15 @@ const UpdatedHeader = () => {
     return (
         <div className={`bg-white mainNavHeader text-black w-full ${styles.UpdatedHeader}`}>
             <div className={`w-full ${isSticky ? styles.sticky : ''} ${styles.headerContainer}`}>
+                {/* Banner */}
+                
+                <div className="w-full bg-gradient-to-r from-red-500 to-yellow-500 text-white text-center py-2">
+                  <span className="text-2xl font-extrabold flex items-center justify-center">
+                    <ShoppingCartOutlined className='mr-2 text-3xl' />
+                    Explore Over 1.3 Million Products!
+                  </span>
+                </div>
+
                 {/* Header */}
                 <header className={`w-full ${sharedClasses.flex} ${sharedClasses.justifyBetween} ${sharedClasses.itemsCenter} p-4 border-zinc-200`}>
                     <div className={`${styles.logo} ${sharedClasses.flex} ${sharedClasses.itemsCenter}`}>
