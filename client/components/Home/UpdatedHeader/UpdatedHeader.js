@@ -175,7 +175,7 @@ const UpdatedHeader = () => {
     }, [make, model, part, partAccessorries]);
 
     const handleSearch = () => {
-        if (selectedMake) {
+        //if (selectedMake) {
             const query = new URLSearchParams();
 
             if (selectedMake) query.append('Make', selectedMake);
@@ -184,7 +184,7 @@ const UpdatedHeader = () => {
             if (selectedAccessory) query.append('PartAccessory', selectedAccessory);
 
             router.push(`/shop?${query.toString()}`);
-        }
+        //}
     };
 
     return (
