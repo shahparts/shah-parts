@@ -164,7 +164,7 @@ const Categories = () => {
                                             <div key={index} className="my-0">
                                                 <b>#{index + 1}</b>
                                                 <Image src={product?.Pictures[0]} height={64} width={64} alt='Product' />
-                                                <span>{product?.Title}</span>
+                                                <a href={"/product/"+product._id}>{product?.Title}</a>
                                                 <span>Qty: {product?.qtyToShop}</span>
                                                 <span>${parseInt(product?.Price * product?.qtyToShop)}</span>
                                             </div>
