@@ -56,6 +56,8 @@ const Footer = () => {
                             <strong> CITY, HYOGO.</strong>
                             <br />
                             <strong>JAPAN.</strong>
+                            <br />ブハリインターナショナル合同会社 
+                            <br />住所: 兵庫県神戸市東灘区渦森台2丁目5番地
                         </p>
                         <p>&nbsp;</p>
                     </div>
