@@ -195,7 +195,7 @@ const UpdatedHeader = () => {
                 <div className="w-full bg-gradient-to-r from-red-500 to-yellow-500 text-white text-center py-2">
                   <span className="text-2xl font-extrabold flex items-center justify-center">
                     <ShoppingCartOutlined className='mr-2 text-3xl' />
-                    Explore Over 1.3 Million Products!
+                    Explore Over 2.3 Million Products!
                   </span>
                 </div>
 
