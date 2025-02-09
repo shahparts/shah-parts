@@ -1,10 +1,11 @@
 const express = require('express');
 const { isAdmin, AuthenticatorJWT } = require('../middlewares/authenticator');
-const { getProductById, updateProduct, deleteProduct, getRelatedProducts, uploadProduct, getAllAdminProducts, getLimitedProducts, getFeaturedProducts, searchProducts, uploadBulkProducts, getAllProductsMakes, getAllProductsParts, getAllProductsModelsByMake, getAllProductsPartsByModel, getAllProductsPartAccessorriesByPart, addProductReview, removeProductReview } = require('../controllers/productController');
+const { getProductById, updateProduct, deleteProduct, getRelatedProducts, uploadProduct, getAllAdminProducts, getLimitedProducts, getFeaturedProducts, searchProducts, uploadBulkProducts, getAllProductsMakes, getAllProductsParts, getAllProductsModelsByMake, getAllProductsPartsByModel, getAllProductsPartAccessorriesByPart, addProductReview, removeProductReview, getProductIdsChunk } = require('../controllers/productController');
 
 const router = express.Router();
 
 router.get('/get/related/:id', getRelatedProducts);
+router.get('/get/product-ids/', getProductIdsChunk);
 router.get('/get/featured', getFeaturedProducts);
 router.get('/admin/get/:id', getAllAdminProducts);
 router.get('/product/:id', getProductById);

@@ -1,23 +1,39 @@
+const axios = require('axios');
+const fs = require('fs');
 const { SitemapStream, streamToPromise } = require('sitemap');
-const { createWriteStream } = require('fs');
-const { Readable } = require('stream');
 
-const links = [
-  { url: 'https://shahparts.com/', changefreq: 'monthly', priority: 1.0 },
-  { url: 'https://shahparts.com/shop/', changefreq: 'monthly', priority: 0.9 },
-  { url: 'https://shahparts.com/brands/', changefreq: 'monthly', priority: 0.9 },
-  { url: 'https://shahparts.com/categories/', changefreq: 'monthly', priority: 0.9 },
-  { url: 'https://shahparts.com/about-us/', changefreq: 'monthly', priority: 0.8 },
-  { url: 'https://shahparts.com/contact-us/', changefreq: 'monthly', priority: 0.8 },
-  { url: 'https://shahparts.com/terms-and-conditions/', changefreq: 'monthly', priority: 0.8 },
-  { url: 'https://shahparts.com/user/profile/', changefreq: 'monthly', priority: 0.7 },
-  { url: 'https://shahparts.com/cart/', changefreq: 'monthly', priority: 0.7 },
-  // Add more URLs here
-];
+async function generateSitemaps() {
+  let page = 1;
+  let hasMoreProducts = true;
 
-const stream = new SitemapStream({ hostname: 'https://www.shahparts.com' });
+  while (hasMoreProducts) {
+    const response = await axios.get('http://localhost:8000/api/products/get/product-ids/', {
+      params: {
+        page,
+        limit: 1000
+      }
+    });
 
-const writableStream = createWriteStream('./public/sitemap.xml');
-streamToPromise(Readable.from(links).pipe(stream)).then((data) =>
-  writableStream.write(data.toString())
-);
+    const productIds = response.data;
+    if (productIds.length > 0) {
+      const sitemap = new SitemapStream({ hostname: 'https://shahparts.com' });
+      const writeStream = fs.createWriteStream(`./sitemap${page}.xml`);
+
+      sitemap.pipe(writeStream);
+
+      productIds.forEach(({ _id }) => {
+        sitemap.write({ url: `/product/${_id}`, changefreq: 'daily', priority: 0.8 });
+      });
+
+      sitemap.end();
+      await streamToPromise(sitemap); // Wait for the sitemap stream to finish
+
+      console.log(`Generated sitemap for page ${page}`);
+      page += 1;
+    } else {
+      hasMoreProducts = false;
+    }
+  }
+}
+
+generateSitemaps().catch(console.error);

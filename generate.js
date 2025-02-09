@@ -1,33 +1,49 @@
 const fs = require('fs');
 const path = require('path');
+const JSONStream = require('JSONStream');
 
+// Process the JSON file in chunks
 const processJsonFile = (inputFilePath, chunkSize) => {
-    fs.readFile(inputFilePath, 'utf8', (err, data) => {
+    let chunk = [];
+    let chunkIndex = 1;
+
+    // Read the JSON file as a stream
+    const readStream = fs.createReadStream(inputFilePath, { encoding: 'utf8' });
+    const jsonStream = JSONStream.parse('*');
+
+    // Pipe the read stream through JSONStream
+    readStream
+        .pipe(jsonStream)
+        .on('data', (data) => {
+            // Add data to the current chunk
+            chunk.push(data);
+
+            // If the chunk size is reached, write the chunk to a new file
+            if (chunk.length >= chunkSize) {
+                writeChunkToFile(chunk, chunkIndex++);
+                chunk = []; // Reset the chunk
+            }
+        })
+        .on('end', () => {
+            // Write any remaining items to a final file
+            if (chunk.length > 0) {
+                writeChunkToFile(chunk, chunkIndex++);
+            }
+            console.log('Processing completed.');
+        })
+        .on('error', (err) => {
+            console.error('Error processing the file:', err);
+        });
+};
+
+// Helper function to write a chunk to a file
+const writeChunkToFile = (chunk, index) => {
+    const outputFilePath = path.join(__dirname, `outputProducts_${index}.json`);
+    fs.writeFile(outputFilePath, JSON.stringify(chunk, null, 2), 'utf8', (err) => {
         if (err) {
-            console.error('Error reading the file:', err);
-            return;
-        }
-
-        let products;
-        try {
-            products = JSON.parse(data);
-        } catch (parseError) {
-            console.error('Error parsing JSON:', parseError);
-            return;
-        }
-
-        // Split products into chunks of chunkSize
-        for (let i = 0; i < products.length; i += chunkSize) {
-            const chunk = products.slice(i, i + chunkSize);
-            const outputFilePath = path.join(__dirname, `outputProducts_${i / chunkSize + 1}.json`);
-
-            fs.writeFile(outputFilePath, JSON.stringify(chunk, null, 2), 'utf8', (writeErr) => {
-                if (writeErr) {
-                    console.error('Error writing the file:', writeErr);
-                } else {
-                    console.log(`File ${outputFilePath} has been processed and saved successfully.`);
-                }
-            });
+            console.error(`Error writing file ${outputFilePath}:`, err);
+        } else {
+            console.log(`File ${outputFilePath} has been saved successfully.`);
         }
     });
 };

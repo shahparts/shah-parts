@@ -32,6 +32,31 @@ exports.getAllProducts = async (req, res) => {
   }
 }
 
+exports.getProductIdsChunk = async (req, res) => {
+  const { page, limit } = req.query;
+
+  const pageNumber = parseInt(page, 10) || 1;
+  const pageSize = parseInt(limit, 10) || 50000;
+  const skip = (pageNumber - 1) * pageSize;
+
+  try {
+    const productIds = await Product.find()
+      .select('_id')
+      .skip(skip)
+      .limit(pageSize)
+      .exec();
+
+    if (productIds.length > 0) {
+      res.status(200).json(productIds);
+    } else {
+      res.status(404).json({ errorMessage: 'No Products found!' });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
+};
+
 exports.getLimitedProducts = async (req, res) => {
   try {
     let minPrice;
