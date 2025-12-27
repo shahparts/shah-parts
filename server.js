@@ -13,7 +13,31 @@ const app = express();
 
 /******************************************  MiddleWares  ********************************************/
 app.use(express.json({ limit: "4000mb" }));
-app.use(cors({ origin: ["http://localhost:3000", "https://shah-parts.vercel.app", "https://www.shahparts.com", "https://shahparts.com"] }));
+// app.use(cors({ origin: ["http://localhost:3000", "https://shah-parts.vercel.app", "https://www.shahparts.com", "https://shahparts.com"] }));
+app.use(cors({
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "http://localhost:3000",
+      "https://shah-parts.vercel.app",
+      "https://www.shahparts.com",
+      "https://shahparts.com"
+    ];
+
+    // allow requests with no origin (mobile apps, curl, postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+app.options("*", cors());
+
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(__dirname + '/uploads'));

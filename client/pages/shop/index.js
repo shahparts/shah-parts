@@ -1,12 +1,13 @@
 import { ErrorAlert } from '@/components/Commons/Messages/Messages';
 import { Col, Pagination, Row, Select } from 'antd';
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import styles from './shop.module.css';
 import Loading from '@/components/Commons/Loading/Loading';
 import { ProductCard } from '@/components/Commons/ProductCard/ProductCard';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { debounce } from 'lodash';
+import { useRouter } from 'next/router';
 
 const ShopPage = () => {
   const hasRun = useRef(false);
@@ -24,9 +25,16 @@ const ShopPage = () => {
   const [totalCount, setTotalCount] = useState();
   const [current, setCurrent] = useState(1);
 
+  const router = useRouter();
+  const ids = useMemo(() => {
+    return router.query.ids ? router.query.ids.split(',') : [];
+  }, [router.query.ids]);
+
+
+
   const getAllData = async () => {
     setLoading(true);
-    await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, { page: current - 1, pageSize: "20", Make: make, Model: model, Part: part, PartAccessorries: partAccessorries, sortBy: sortValue }).then(res => {
+    await axios.post(`http://localhost:8000/api/products/get`, { page: current - 1, pageSize: "20", Make: make, Model: model, Part: part, PartAccessorries: partAccessorries, sortBy: sortValue }).then(res => {
       setLoading(false);
       if (res.status === 200) {
         setProductsArray(res.data?.products);
@@ -41,15 +49,30 @@ const ShopPage = () => {
     });
   }
 
+  const getSelectedData = async () => {
+    setLoading(true);
+    await axios.post(`http://localhost:8000/api/products/by-ids`, { ids }).then(res => {
+      setLoading(false);
+      if (res.status === 200) {
+        setProductsArray(res.data?.products);
+        setTotalCount(res.data.count);
+      }
+      else {
+        ErrorAlert(res.data.errorMessage);
+      }
+    }).catch(err => {
+      setLoading(false);
+      console.log(err)
+    });
+  }
 
-  useEffect(() => {
-    const debouncedGetAllData = debounce(() => getAllData(), 700);
-    debouncedGetAllData();
-
-    return () => {
-      debouncedGetAllData.cancel();
-    };
-  }, [updateData, current, sortValue]);
+useEffect(() => {
+  if (ids.length > 0) {
+    getSelectedData();
+  } else {
+    getAllData();
+  }
+}, [ids.length, make, model, part, partAccessorries, current, sortValue]);
 
 
   const handleSortChange = (value) => {
@@ -57,22 +80,22 @@ const ShopPage = () => {
   };
 
   useEffect(() => {
-    const updateGlobalState = () => {
-      if (productsArray?.length > 0 && !hasRun.current) {
-        let firstProduct = productsArray[0];
-        if (part && (!model && !make && !partAccessorries)) {
-          setFilterValuesFun(firstProduct?.Make, firstProduct?.Model, part, "", "NoRefresh");
-          hasRun.current = true;
-        }
-      }
-    }
-    const debouncedUpdateGlobalState = debounce(() => updateGlobalState(), 1000);
-    debouncedUpdateGlobalState();
+  if (!part || hasRun.current) return;
+  if (make || model || partAccessorries) return;
 
-    return () => {
-      debouncedUpdateGlobalState.cancel();
-    };
-  }, [productsArray]);
+  if (productsArray.length > 0) {
+    const first = productsArray[0];
+    setFilterValuesFun(
+      first.Make,
+      first.Model,
+      part,
+      "",
+      "NoRefresh"
+    );
+    hasRun.current = true;
+  }
+}, [productsArray, part, make, model, partAccessorries]);
+
 
 
   return (

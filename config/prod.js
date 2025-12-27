@@ -6,5 +6,7 @@ module.exports = {
     CLOUDINARY_API_KEY: '633615861791628',
     CLOUDINARY_SECRET_KEY: 'pcu5hDuFK01arwcxuotN3EHXFRc',
     EMAIL: 'kobeurial@gmail.com',
-    PASSWORD: "syklaksnolwkncpl"
+    PASSWORD: "syklaksnolwkncpl",
+    ELASTIC_HOST: "http://167.172.21.10:9200/",
+    BULK_BATCH_SIZE: 50000,
 }
