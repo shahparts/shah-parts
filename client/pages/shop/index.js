@@ -104,12 +104,17 @@ const ShopPage = () => {
 
   // Handle search from FiltersBar
   const handleSearch = (filterValues) => {
-    setFilters({
-      make: filterValues.make,
-      model: filterValues.model,
-      part: filterValues.part,
-      partAccessory: filterValues.partAccessory
-    });
+    if (filterValues?.make) {
+      router.push("/shop");
+      setTimeout(() => {
+        setFilters({
+          make: filterValues.make,
+          model: filterValues.model,
+          part: filterValues.part,
+          partAccessory: filterValues.partAccessory
+        });
+      }, 1000);
+    }
   };
 
   return (

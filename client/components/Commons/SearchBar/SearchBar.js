@@ -4,7 +4,7 @@ import styles from "./SearchBar.module.css";
 import { ButtonComp } from '../ButtonComp/ButtonComp';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
+import { CloseOutlined, SearchOutlined, SendOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 
 const sharedClasses = {
@@ -100,6 +100,28 @@ const SearchBar = () => {
         setResults([]);
     }
 
+    useEffect(() => {
+        searchTerm && setSearchTerm("");
+        results?.length > 0 && setResults([]);
+
+        return () => {
+
+        }
+    }, [router.pathname]);
+
+    const handleSendClick = async () => {
+        setSearchTerm("");
+        // Collect IDs from results
+        const ids = await results.map(item => item.id);
+        // Pass IDs as a query param (if not too many) or use state management
+        router.push({
+            pathname: '/shop',
+            query: { ids: ids.join(',') }
+        });
+        ids?.length > 0 && setResults([]);
+    }
+
+
     return (
         <div className={styles.SearchBar}>
             <div className='flex gap-4 flex-wrap items-center justify-between'>
@@ -119,26 +141,6 @@ const SearchBar = () => {
                                 itemLayout="horizontal"
                                 dataSource={results}
                                 loading={loading}
-                                header={
-                                    <div className='text-end pr-4'>
-                                        <Button
-                                            className="ml-auto"
-                                            color='white'
-                                            onClick={async () => {
-                                                // Collect IDs from results
-                                                const ids = await results.map(item => item.id);
-                                                // Pass IDs as a query param (if not too many) or use state management
-                                                router.push({
-                                                    pathname: '/shop',
-                                                    query: { ids: ids.join(',') }
-                                                });
-                                                ids?.length > 0 && setResults([]);
-                                            }}
-                                        >
-                                            View All
-                                        </Button>
-                                    </div>
-                                }
                                 renderItem={item => (
                                     <List.Item>
                                         <Link onClick={handleLinkClick} href={`/product/${item.id}`}>{item.source.Title}</Link>
@@ -150,8 +152,8 @@ const SearchBar = () => {
                 </div>
                 {(results?.length > 0 || searchTerm) ?
                     <div>
-                        <button onClick={() => { setSearchTerm(""); setResults([]) }} className={`w-[43px] h-[43px] flex justify-center items-center ${sharedClasses.p2} ${sharedClasses.bgRed500} ${sharedClasses.textWhite} ${sharedClasses.roundedFull}`}>
-                            <CloseOutlined className='text-[21px]' />
+                        <button onClick={handleSendClick} className={`w-[43px] h-[43px] flex justify-center items-center ${sharedClasses.p2} ${sharedClasses.bgRed500} ${sharedClasses.textWhite} ${sharedClasses.roundedFull}`}>
+                            <SendOutlined className='text-[21px]' />
                         </button>
                     </div>
                     :
