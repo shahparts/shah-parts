@@ -100,8 +100,11 @@ const SearchBar = () => {
         setResults([]);
     }
 
+    console.log(router.pathname)
+
     useEffect(() => {
-        searchTerm && setSearchTerm("");
+
+        searchTerm && router.pathname !== "/shop" && setSearchTerm("");
         results?.length > 0 && setResults([]);
 
         return () => {
@@ -110,13 +113,13 @@ const SearchBar = () => {
     }, [router.pathname]);
 
     const handleSendClick = async () => {
-        setSearchTerm("");
+        // setSearchTerm("");
         // Collect IDs from results
         const ids = await results.map(item => item.id);
         // Pass IDs as a query param (if not too many) or use state management
         router.push({
             pathname: '/shop',
-            query: { ids: ids.join(',') }
+            query: { searchQuery: searchTerm, ids: ids.join(',') }
         });
         ids?.length > 0 && setResults([]);
     }
