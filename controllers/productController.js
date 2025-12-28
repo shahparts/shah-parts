@@ -110,7 +110,7 @@ exports.getLimitedProducts = async (req, res) => {
       case "htl":
         sortOption.Price = -1; // Price: High to Low
         break;
-      case "a-z":
+      case "a-z":  
         sortOption.Title = 1; // Product Name: A-Z
         break;
       case "z-a":
@@ -339,12 +339,38 @@ exports.getProductById = async (req, res) => {
 
 exports.getProductsByIds = async (req, res) => {
   const { ids } = req.body;
+
+  const PAGE_SIZE = 20;
+  const page = parseInt(req.body.page || "0");
+
+  // Sorting logic based on the sort option selected
+  let sortOption = {};
+  switch (req.body.sortBy) {
+    case "lth":
+      sortOption.Price = 1; // Price: Low to High
+      break;
+    case "htl":
+      sortOption.Price = -1; // Price: High to Low
+      break;
+    case "a-z":
+      sortOption.Title = 1; // Product Name: A-Z
+      break;
+    case "z-a":
+      sortOption.Title = -1; // Product Name: Z-A
+      break;
+    case "createdAt":
+    default:
+      sortOption.createdAt = -1; // Released Date (default)
+      break;
+  }
+
   if (!ids || !Array.isArray(ids)) {
     return res.status(400).json({ error: 'Invalid ids' });
   }
   try {
-    const products = await Product.find({ _id: { $in: ids } });
-    res.status(200).json({ products });
+    const count = await Product.countDocuments({ _id: { $in: ids } });
+    const products = await Product.find({ _id: { $in: ids } }).limit(PAGE_SIZE).skip(PAGE_SIZE * page).sort(sortOption).exec();
+    res.status(200).json({ products, count });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch products' });
   }
@@ -623,9 +649,9 @@ async function searchProductsV2(req, res) {
       }
     });
   }
-  if (make) must.push({ term: { Make: make }});
-  if (model) must.push({ term: { Model: model }});
-  if (part) must.push({ term: { Part: part }});
+  if (make) must.push({ term: { Make: make } });
+  if (model) must.push({ term: { Model: model } });
+  if (part) must.push({ term: { Part: part } });
 
   const body = {
     query: {

@@ -15,31 +15,14 @@ const SearchContainer = ({ show, onClose }) => {
     const debounceTimeout = useRef(null);
 
     const router = useRouter();
-
-    const getAllData = async (searchTerm) => {
-        setLoading(true);
-        try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, { pageSize: "100", title: searchTerm });
-            setLoading(false);
-            if (res.status === 200) {
-                setResults(res.data?.products);
-                setTotalCount(res.data.products?.length);
-            } else {
-                ErrorAlert(res.data.errorMessage);
-            }
-        } catch (err) {
-            setLoading(false);
-            console.log(err);
-        }
-    };
-
+    
     const searchRelevantProducts = async (searchTerm) => {
         setLoading(true);
         try {
             console.log("Line 36: ", searchTerm);
             const res = await axios.post(
                 `http://localhost:8000/api/products/search`,
-                { q: searchTerm, perPage: 100 }
+                { q: searchTerm, perPage: 200 }
             );
             setLoading(false);
             if (res.status === 200) {
@@ -93,7 +76,8 @@ const SearchContainer = ({ show, onClose }) => {
                 onChange={handleSearch}
             />
             <Button
-                className={styles.viewAllBtn}
+                className="text-white"
+                color='white'
                 onClick={() => {
                     onClose();
                     setSearchTerm("");

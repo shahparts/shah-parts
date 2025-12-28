@@ -1,248 +1,169 @@
-import React, { useEffect, useState } from 'react';
-import { Select, Space } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Input, List, Select, Space } from 'antd';
 import styles from "./SearchBar.module.css";
 import { ButtonComp } from '../ButtonComp/ButtonComp';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
+import Link from 'next/link';
+
+const sharedClasses = {
+    flex: 'flex',
+    itemsCenter: 'items-center',
+    justifyBetween: 'justify-between',
+    spaceX4: 'space-x-4',
+    textZinc700: 'text-zinc-700',
+    hoverTextBlack: 'hover:text-black',
+    p2: 'p-2',
+    roundedFull: 'rounded-full',
+    border: 'border',
+    borderZinc300: 'border-zinc-300',
+    bgRed500: 'bg-red-500',
+    textWhite: 'text-white',
+    flexCol: 'flex flex-col',
+    textLg: 'text-lg',
+    fontSemibold: 'font-semibold',
+    textZinc600: 'text-zinc-600',
+    grid: 'grid',
+    gridCols1: 'grid-cols-1',
+    mdGridCols2: 'md:grid-cols-2',
+    lgGridCols3: 'lg:grid-cols-3',
+    gap4: 'gap-4',
+    relative: 'relative',
+    wFull: 'w-full',
+    h48: 'h-48',
+    objectCover: 'object-cover',
+    roundedLg: 'rounded-lg',
+    absolute: 'absolute',
+    top2: 'top-2',
+};
 
 const SearchBar = () => {
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const [makesArray, setMakesArray] = useState([]);
-    const [modelsArray, setModelsArray] = useState([]);
-    const [partsArray, setPartsArray] = useState([]);
-    const [partAccessoriesArray, setPartAccessoriesArray] = useState([]);
+    // const [showResults, setShowResults] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [results, setResults] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const debounceTimeout = useRef(null);
 
-    const [selectedMake, setSelectedMake] = useState(null);
-    const [selectedModel, setSelectedModel] = useState(null);
-    const [selectedPart, setSelectedPart] = useState(null);
-    const [selectedAccessory, setSelectedAccessory] = useState(null);
+    const router = useRouter();
 
-    const getAllMakes = async () => {
+    const searchRelevantProducts = async (searchTerm) => {
         setLoading(true);
-        await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/makes`).then((res) => {
-            setLoading(false);
-            if (res.status === 200) {
-                setMakesArray(res.data?.map(f => ({ value: f?.make, label: f?.make })));
+        try {
+            if (searchTerm) {
+                console.log("Line 36: ", searchTerm);
+                const res = await axios.post(
+                    `http://localhost:8000/api/products/search`,
+                    { q: searchTerm, perPage: 200 }
+                );
+                setLoading(false);
+                if (res.status === 200) {
+                    console.log("Line 43: ", res.data.results);
+                    setResults(res.data.results);
+                    setTotalCount(res.data.results.length);
+                } else {
+                    ErrorAlert(res.data.errorMessage);
+                }
             }
             else {
-                console.error(res.data.errorMessage);
+                setResults([]);
             }
-        }).catch(err => {
+        } catch (err) {
             setLoading(false);
             console.log(err);
-        });
-    }
-
-    const getAllModelsByMake = async (Make) => {
-        setLoading(true);
-        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/models/make`, { Make }).then((res) => {
-            setLoading(false);
-            if (res.status === 200) {
-                setModelsArray(res.data?.map(f => ({ value: f, label: f })));
-                setSelectedModel("");
-                setSelectedPart("");
-                setSelectedAccessory("");
-            }
-            else {
-                console.error(res.data.errorMessage);
-            }
-        }).catch(err => {
-            setLoading(false);
-            console.log(err);
-        });
-    }
-
-    const getAllPartByModel = async (Model) => {
-        setLoading(true);
-        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/parts/model`, { Model }).then((res) => {
-            setLoading(false);
-            if (res.status === 200) {
-                setPartsArray(res.data?.map(f => ({ value: f, label: f })));
-                setSelectedPart("");
-                setSelectedAccessory("");
-            }
-            else {
-                console.error(res.data.errorMessage);
-            }
-        }).catch(err => {
-            setLoading(false);
-            console.log(err);
-        });
-    }
-
-    const getAllPartAccessoriesByPart = async (Part) => {
-        setLoading(true);
-        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/partaccessories/part`, { Part }).then((res) => {
-            setLoading(false);
-            if (res.status === 200) {
-                setPartAccessoriesArray(res.data?.map(f => ({ value: f, label: f })));
-            }
-            else {
-                console.error(res.data.errorMessage);
-            }
-        }).catch(err => {
-            setLoading(false);
-            console.log(err);
-        });
-    }
-
-    useEffect(() => {
-        getAllMakes();
-    }, []);
-
-    const handleSearch = () => {
-        if (selectedMake) {
-            const query = new URLSearchParams();
-
-            if (selectedMake) query.append('Make', selectedMake);
-            if (selectedModel) query.append('Model', selectedModel);
-            if (selectedPart) query.append('Part', selectedPart);
-            if (selectedAccessory) query.append('PartAccessory', selectedAccessory);
-
-            router.push(`/shop?${query.toString()}`);
         }
     };
 
+    const handleSearch = (e) => {
+        console.log("Line 68: ", e.target.value);
+        const value = e.target.value;
+        setSearchTerm(value);
+
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+
+        debounceTimeout.current = setTimeout(() => {
+            if (value?.trim()) {
+                console.log("Line 78: ", value);
+                searchRelevantProducts(value);
+            } else {
+                setResults([]);
+                setTotalCount(0);
+            }
+        }, 500); // 500ms debounce
+    };
+
+    const handleLinkClick = () => {
+        setSearchTerm("");
+        setResults([]);
+    }
+
     return (
         <div className={styles.SearchBar}>
-            <div className='flex gap-6 flex-wrap'>
-                <Space wrap>
-                    <label>Make</label>
-                    <Select
-                        allowClear
-                        showSearch
-                        className={styles.select}
-                        placeholder="Make"
-                        style={{ minWidth: 120 }}
-                        onChange={(val) => {
-                            setSelectedMake(val);
-                            getAllModelsByMake(val);
-                        }}
-                        options={makesArray}
+            <div className='flex gap-4 flex-wrap items-center justify-between'>
+                <div className='flex-1'>
+                    <Input
+                        placeholder="Type here to search..."
+                        id="searchbox"
+                        type="search"
+                        className={styles.searchbox}
+                        value={searchTerm}
+                        onChange={handleSearch}
                     />
-                </Space>
-                <Space wrap>
-                    <label>Model</label>
-                    <Select
-                        allowClear
-                        showSearch
-                        className={styles.select}
-                        value={selectedModel}
-                        placeholder="Model"
-                        style={{ minWidth: 120 }}
-                        onChange={(val) => {
-                            setSelectedModel(val);
-                            getAllPartByModel(val);
-                        }}
-                        options={modelsArray}
-                    />
-                </Space>
-                <Space wrap>
-                    <label>Part</label>
-                    <Select
-                        allowClear
-                        showSearch
-                        className={styles.select}
-                        placeholder="Part"
-                        value={selectedPart}
-                        style={{ minWidth: 120 }}
-                        onChange={(val) => {
-                            setSelectedPart(val);
-                            getAllPartAccessoriesByPart(val);
-                        }}
-                        options={partsArray}
-                    />
-                </Space>
-                <Space wrap>
-                    <label>Accessories</label>
-                    <Select
-                        allowClear
-                        showSearch
-                        className={styles.select}
-                        value={selectedAccessory}
-                        placeholder="Accessories"
-                        style={{ minWidth: 120 }}
-                        onChange={(val) => setSelectedAccessory(val)}
-                        options={partAccessoriesArray}
-                    />
-                </Space>
-                <Space className={styles.button}>
-                    <ButtonComp text="Search" onClick={handleSearch} />
-                </Space>
+                    {results?.length > 0 && (
+                        <div className={styles.resultsContainer}>
+                            <List
+                                className={styles.resultsList}
+                                itemLayout="horizontal"
+                                dataSource={results}
+                                loading={loading}
+                                header={
+                                    <div className='text-end pr-4'>
+                                        <Button
+                                            className="ml-auto"
+                                            color='white'
+                                            onClick={async () => {
+                                                // Collect IDs from results
+                                                const ids = await results.map(item => item.id);
+                                                // Pass IDs as a query param (if not too many) or use state management
+                                                router.push({
+                                                    pathname: '/shop',
+                                                    query: { ids: ids.join(',') }
+                                                });
+                                                ids?.length > 0 && setResults([]);
+                                            }}
+                                        >
+                                            View All
+                                        </Button>
+                                    </div>
+                                }
+                                renderItem={item => (
+                                    <List.Item>
+                                        <Link onClick={handleLinkClick} href={`/product/${item.id}`}>{item.source.Title}</Link>
+                                    </List.Item>
+                                )}
+                            />
+                        </div>
+                    )}
+                </div>
+                {(results?.length > 0 || searchTerm) ?
+                    <div>
+                        <button onClick={() => { setSearchTerm(""); setResults([]) }} className={`w-[43px] h-[43px] flex justify-center items-center ${sharedClasses.p2} ${sharedClasses.bgRed500} ${sharedClasses.textWhite} ${sharedClasses.roundedFull}`}>
+                            <CloseOutlined className='text-[21px]' />
+                        </button>
+                    </div>
+                    :
+                    <div>
+                        <button onClick={handleSearch} className={`w-[43px] h-[43px] flex justify-center items-center ${sharedClasses.p2} ${sharedClasses.bgRed500} ${sharedClasses.textWhite} ${sharedClasses.roundedFull}`}>
+                            <SearchOutlined className='text-[21px]' />
+                        </button>
+                    </div>
+                }
             </div>
         </div>
     );
 };
 
 export default SearchBar;
-
-
-
-// import { DownOutlined } from '@ant-design/icons';
-// import { Dropdown, Menu, Space } from 'antd';
-// import axios from 'axios';
-// import Link from 'next/link';
-// import React, { useEffect, useState } from 'react';
-// import { ErrorAlert } from '../Messages/Messages';
-// import styles from "./CategoriesBar.module.css";
-
-// const CategoriesBar = () => {
-//     const [categories, setCategories] = useState([]);
-//     const [loading, setLoading] = useState(false);
-
-//     const getAllCategories = async () => {
-//         setLoading(true);
-//         await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/categories/get`).then(res => {
-//             setLoading(false);
-//             if (res.statusText === "OK") {
-//                 setCategories(res.data);
-//             } else {
-//                 ErrorAlert(res.data.errorMessage);
-//             }
-//         }).catch(err => {
-//             setLoading(false);
-//             console.log(err);
-//             ErrorAlert(err?.message);
-//         })
-//     }
-
-//     useEffect(() => {
-//         getAllCategories();
-
-//         return () => {
-//         }
-//     }, []);
-
-//     const generateMenuItems = (children) => {
-//         return (
-//             <Menu className={styles.menu}>
-//                 {children.map((child, index) => (
-//                     <Menu.Item key={index + 1}>
-//                         <Link href={`/products?category=${child?._id}`}>
-//                             {child.title}
-//                         </Link>
-//                     </Menu.Item>
-//                 ))}
-//             </Menu>
-//         );
-//     };
-
-//     return (
-//         <div className={styles.CategoriesBar}>
-//             {categories?.map(category => (
-//                 <Dropdown
-//                     key={category?._id}
-//                     overlay={generateMenuItems(category?.children)}
-//                 >
-//                     <Link href="/" className={styles.title} onClick={(e) => e.preventDefault()}>
-//                         {category?.title}
-//                         <DownOutlined className={styles.icon} />
-//                     </Link>
-//                 </Dropdown>
-//             ))}
-//         </div>
-//     )
-// }
-
-// export default CategoriesBar;
