@@ -1,10 +1,12 @@
 module.exports = {
-    MONGO_URI: 'mongodb+srv://shahparts:241180MujtabaHassan@cluster0.fc40i.mongodb.net/shah-parts?retryWrites=true&w=majority&appName=Cluster0',
-    JWT_SECRET: 'kdjkasjqr8239r8kfj939kdjkdjfkwt944039043kjgkwjgkwgwlkg404204wegklgkt42-owpglw4-y34pyo3py0239tfkeit049igkjkvjvw049t09tofjkwrjt034tigdfkjgkdfjg0rt9304fsdkfj04t904gigo',
-    JWT_EXPIRE: '24h',
-    CLOUDINARY_CLOUD_NAME: 'saeedahmed',
-    CLOUDINARY_API_KEY: '633615861791628',
-    CLOUDINARY_SECRET_KEY: 'pcu5hDuFK01arwcxuotN3EHXFRc',
-    EMAIL: 'kobeurial@gmail.com',
-    PASSWORD: "syklaksnolwkncpl"
+    MONGO_URI: process.env.MONGO_URI,
+    JWT_SECRET: process.env.JWT_SECRET,
+    JWT_EXPIRE: process.env.JWT_EXPIRE,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_SECRET_KEY: process.env.CLOUDINARY_SECRET_KEY,
+    EMAIL: process.env.EMAIL_USER,
+    PASSWORD: process.env.EMAIL_PASSWORD,
+    ELASTIC_HOST: process.env.ELASTIC_HOST,
+    BULK_BATCH_SIZE: 50000,
 }

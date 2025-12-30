@@ -26,8 +26,8 @@ const Header = () => {
                     disableOnInteraction: true,
                 }}
                 loop={true}
-                onSlideChange={() => console.log('slide change')}
-                onSwiper={(swiper) => console.log(swiper)}
+                // onSlideChange={() => console.log('slide change')}
+                // onSwiper={(swiper) => console.log(swiper)}
                 pagination={{
                     clickable: true,
                 }}

@@ -1,4 +1,5 @@
 const Product = require('../models/productModel');
+const client = require('../config/elasticsearch/elasticClient');
 
 const createIndexes = async () => {
   try {
@@ -109,7 +110,7 @@ exports.getLimitedProducts = async (req, res) => {
       case "htl":
         sortOption.Price = -1; // Price: High to Low
         break;
-      case "a-z":
+      case "a-z":  
         sortOption.Title = 1; // Product Name: A-Z
         break;
       case "z-a":
@@ -336,18 +337,107 @@ exports.getProductById = async (req, res) => {
   }
 }
 
+exports.getProductsByIds = async (req, res) => {
+  const { ids } = req.body;
+
+  const PAGE_SIZE = 20;
+  const page = parseInt(req.body.page || "0");
+
+  // Sorting logic based on the sort option selected
+  let sortOption = {};
+  switch (req.body.sortBy) {
+    case "lth":
+      sortOption.Price = 1; // Price: Low to High
+      break;
+    case "htl":
+      sortOption.Price = -1; // Price: High to Low
+      break;
+    case "a-z":
+      sortOption.Title = 1; // Product Name: A-Z
+      break;
+    case "z-a":
+      sortOption.Title = -1; // Product Name: Z-A
+      break;
+    case "createdAt":
+    default:
+      sortOption.createdAt = -1; // Released Date (default)
+      break;
+  }
+
+  if (!ids || !Array.isArray(ids)) {
+    return res.status(400).json({ error: 'Invalid ids' });
+  }
+  try {
+    const count = await Product.countDocuments({ _id: { $in: ids } });
+    const products = await Product.find({ _id: { $in: ids } }).limit(PAGE_SIZE).skip(PAGE_SIZE * page).sort(sortOption).exec();
+    res.status(200).json({ products, count });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch products' });
+  }
+};
+
 exports.searchProducts = async (req, res) => {
   try {
-    const findProducts = await Product.find({ $or: [{ Title: { $regex: new RegExp(req.body.Title, 'i') } }, { subTTitle: { $regex: new RegExp(req.body.Title, 'i') } }] })
+    const { q, page = 1, perPage = 10 } = req.body;
+    const must = [];
 
-      .exec();
-    if (findProducts) {
-      res.status(200).json(findProducts);
-    } else {
-      res.status(404).json({ errorMessage: 'No products found' });
+    if (q) {
+      must.push({
+        multi_match: {
+          query: q,
+          fields: ['Title^4', 'Title.autocomplete^6', 'Description'],
+          fuzziness: 'AUTO'
+        }
+      });
     }
+
+    const body = {
+      query: must.length ? { bool: { must } } : { match_all: {} },
+      highlight: {
+        fields: {
+          Title: {},
+          Description: {}
+        }
+      },
+      from: (page - 1) * perPage,
+      size: perPage
+    };
+
+    const esResult = await client.search({ index: 'products_v2', body });
+    const hits = esResult.hits.hits;
+    const results = hits.map(h => ({ id: h._id, score: h._score, source: h._source, highlight: h.highlight }));
+
+    res.status(200).json({ total: esResult.hits.total.value, results });
   } catch (error) {
+    console.error('ES search error:', error);
     res.status(500).json({ errorMessage: 'Error in finding products', error });
+  }
+};
+
+exports.autocompleteProducts = async (req, res) => {
+  try {
+    const q = (req.query.q || req.body.q || '').trim();
+    if (!q) return res.status(200).json({ suggestions: [] });
+
+    const body = {
+      query: {
+        bool: {
+          should: [
+            { match_phrase_prefix: { 'Title.autocomplete': { query: q } } },
+            { prefix: { 'Title.autocomplete': { value: q.toLowerCase() } } }
+          ]
+        }
+      },
+      _source: ['Title'],
+      size: 10
+    };
+
+    const resp = await client.search({ index: 'products_v2', body });
+    const suggestions = resp.hits.hits.map(h => ({ id: h._id, title: h._source.Title }));
+    res.status(200).json({ suggestions });
+  } catch (err) {
+    console.error('ES autocomplete error:', err);
+    res.status(500).json({ errorMessage: 'Autocomplete error' });
   }
 };
 
@@ -545,3 +635,48 @@ exports.getRelatedProducts = async (req, res) => {
 }
 
 
+
+
+async function searchProductsV2(req, res) {
+  const { q, make, model, part, page = 1, perPage = 20 } = req.body;
+  const must = [];
+  if (q) {
+    must.push({
+      multi_match: {
+        query: q,
+        fields: ['Title^4', 'Title.autocomplete^6', 'Description'],
+        fuzziness: 'AUTO'
+      }
+    });
+  }
+  if (make) must.push({ term: { Make: make } });
+  if (model) must.push({ term: { Model: model } });
+  if (part) must.push({ term: { Part: part } });
+
+  const body = {
+    query: {
+      bool: {
+        must
+      }
+    },
+    highlight: {
+      fields: {
+        Title: {},
+        Description: {}
+      }
+    },
+    from: (page - 1) * perPage,
+    size: perPage
+  };
+
+  try {
+    const esResult = await client.search({ index: 'products_v2', body });
+    const hits = esResult.body.hits.hits;
+    // Option A: return the ES source directly
+    const results = hits.map(h => ({ id: h._id, score: h._score, source: h._source, highlight: h.highlight }));
+    res.json({ total: esResult.body.hits.total.value, results });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Search error' });
+  }
+}

@@ -3,7 +3,7 @@ const fs = require('fs');
 const { SitemapStream, streamToPromise } = require('sitemap');
 
 const hostname = 'https://shahparts.com'; // Replace with your actual hostname
-const apiEndpoint = 'http://localhost:8000/api/products/get/product-ids/'; // Replace with your actual API endpoint
+const apiEndpoint = 'https://shahparts.com/api/products/get/product-ids/'; // Replace with your actual API endpoint
 
 async function generateSitemaps() {
   let page = 2356;

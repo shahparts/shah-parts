@@ -12,6 +12,7 @@
   },
   "homepage": "",
   "dependencies": {
+    "@elastic/elasticsearch": "^9.2.0",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.27.0",
@@ -19,6 +20,7 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "csvtojson": "^2.0.10",
+    "dotenv": "^17.2.3",
     "express": "^4.17.1",
     "jsonstream": "^1.0.3",
     "jsonwebtoken": "^8.5.1",

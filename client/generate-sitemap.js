@@ -7,7 +7,7 @@ async function generateSitemaps() {
   let hasMoreProducts = true;
 
   while (hasMoreProducts) {
-    const response = await axios.get('http://localhost:8000/api/products/get/product-ids/', {
+    const response = await axios.get('https://shahparts.com/api/products/get/product-ids/', {
       params: {
         page,
         limit: 1000

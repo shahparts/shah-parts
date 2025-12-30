@@ -5,6 +5,7 @@ import Link from 'next/link';
 import styles from './SearchContainer.module.css';
 import axios from 'axios';
 import { ErrorAlert } from '../Messages/Messages';
+import { useRouter } from 'next/router';
 
 const SearchContainer = ({ show, onClose }) => {
     const [loading, setLoading] = useState(false);
@@ -13,14 +14,21 @@ const SearchContainer = ({ show, onClose }) => {
     const [totalCount, setTotalCount] = useState(0);
     const debounceTimeout = useRef(null);
 
-    const getAllData = async (searchTerm) => {
+    const router = useRouter();
+    
+    const searchRelevantProducts = async (searchTerm) => {
         setLoading(true);
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, { pageSize: "100", title: searchTerm });
+            console.log("Line 36: ", searchTerm);
+            const res = await axios.post(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/search`,
+                { q: searchTerm, perPage: 200 }
+            );
             setLoading(false);
             if (res.status === 200) {
-                setResults(res.data?.products);
-                setTotalCount(res.data.products?.length);
+                console.log("Line 43: ", res.data.results);
+                setResults(res.data.results);
+                setTotalCount(res.data.results.length);
             } else {
                 ErrorAlert(res.data.errorMessage);
             }
@@ -31,6 +39,7 @@ const SearchContainer = ({ show, onClose }) => {
     };
 
     const handleSearch = (e) => {
+        console.log("Line 68: ", e.target.value);
         const value = e.target.value;
         setSearchTerm(value);
 
@@ -39,8 +48,14 @@ const SearchContainer = ({ show, onClose }) => {
         }
 
         debounceTimeout.current = setTimeout(() => {
-            getAllData(value);
-        }, 1000);
+            if (value.trim()) {
+                console.log("Line 78: ", value);
+                searchRelevantProducts(value);
+            } else {
+                setResults([]);
+                setTotalCount(0);
+            }
+        }, 500); // 500ms debounce
     };
 
     const handleLinkClick = () => {
@@ -60,6 +75,24 @@ const SearchContainer = ({ show, onClose }) => {
                 value={searchTerm}
                 onChange={handleSearch}
             />
+            <Button
+                className="text-white"
+                color='white'
+                onClick={() => {
+                    onClose();
+                    setSearchTerm("");
+                    setResults([]);
+                    // Collect IDs from results
+                    const ids = results.map(item => item.id);
+                    // Pass IDs as a query param (if not too many) or use state management
+                    router.push({
+                        pathname: '/shop',
+                        query: { ids: ids.join(',') }
+                    });
+                }}
+                >
+                View All
+            </Button>
             {results?.length > 0 && (
                 <List
                     className={styles.resultsList}
@@ -68,7 +101,7 @@ const SearchContainer = ({ show, onClose }) => {
                     loading={loading}
                     renderItem={item => (
                         <List.Item>
-                            <Link onClick={handleLinkClick} href={`/product/${item._id}`}>{item.Title}</Link>
+                            <Link onClick={handleLinkClick} href={`/product/${item.id}`}>{item.source.Title}</Link>
                         </List.Item>
                     )}
                 />
