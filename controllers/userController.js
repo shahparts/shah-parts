@@ -181,7 +181,7 @@ exports.resetPasswordLink = async (req, res) => {
                     if (result) {
                         let url = '';
                         if (process.env.NODE_ENV === 'production') {
-                            url = `https://shah-parts.vercel.app/reset-password/${token}` // The url of the domain on which you are hosting your frontend in production mode to serve the reset-password link page by sending this link to the email
+                            url = `${process.env.FRONTEND_URL}/reset-password/${token}` // The url of the domain on which you are hosting your frontend in production mode to serve the reset-password link page by sending this link to the email
                         } else {
                             url = `http://localhost:3000/reset-password/${token}`  // The url of the frontend in developement mode to serve the reset-password link page on the frontend by sending this link to the email
                         }
