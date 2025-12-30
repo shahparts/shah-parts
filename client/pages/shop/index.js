@@ -34,7 +34,7 @@ const ShopPage = () => {
   const getAllData = async () => {
     setLoading(true);
     try {
-      const res = await axios.post(`http://localhost:8000/api/products/get`, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, {
         page: current - 1,
         pageSize: "20",
         Make: filters.make,
@@ -60,7 +60,7 @@ const ShopPage = () => {
   const getSelectedData = async () => {
     setLoading(true);
     try {
-      const res = await axios.post(`http://localhost:8000/api/products/by-ids`, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/by-ids`, {
         ids,
         page: current - 1,
         pageSize: "20",
