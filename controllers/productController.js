@@ -342,7 +342,7 @@ exports.getProductsByIds = async (req, res) => {
 
   const PAGE_SIZE = 20;
   const page = parseInt(req.body.page || "0");
-
+  
   // Sorting logic based on the sort option selected
   let sortOption = {};
   switch (req.body.sortBy) {
@@ -369,7 +369,8 @@ exports.getProductsByIds = async (req, res) => {
   }
   try {
     const count = await Product.countDocuments({ _id: { $in: ids } });
-    const products = await Product.find({ _id: { $in: ids } }).limit(PAGE_SIZE).skip(PAGE_SIZE * page).sort(sortOption).exec();
+    var limitedIds = ids.slice(PAGE_SIZE * page, PAGE_SIZE * (page + 1));
+    const products = await Product.find({ _id: { $in: limitedIds } }).exec();//.limit(PAGE_SIZE).skip(PAGE_SIZE * page).exec();
     res.status(200).json({ products, count });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch products' });
