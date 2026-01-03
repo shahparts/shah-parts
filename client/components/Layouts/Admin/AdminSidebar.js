@@ -13,7 +13,7 @@ const AdminSidebar = () => {
             <div>
                 <div className={styles.linkContainer}>
                     <div className={styles.linkWrapper}>
-                        <Link to="/admin/dashboard">
+                        <Link href="/admin/dashboard">
                             <button className={`${router.pathname === "/admin/dashboard" ? styles.activeLink : styles.inactiveLink}`}>
                                 <HomeOutlined />
                                 <span>Dashboard</span>
@@ -21,7 +21,7 @@ const AdminSidebar = () => {
                         </Link>
                     </div>
                     <div className={styles.linkWrapper}>
-                        <Link to="/admin/products">
+                        <Link href="/admin/products">
                             <button className={`${router.pathname === "/admin/products" ? styles.activeLink : styles.inactiveLink}`}>
                                 <ShopFilled />
                                 <span>Products</span>
@@ -29,7 +29,7 @@ const AdminSidebar = () => {
                         </Link>
                     </div>
                     <div className={styles.linkWrapper}>
-                        <Link to="/admin/orders">
+                        <Link href="/admin/orders">
                             <button className={`${router.pathname === "/admin/orders" ? styles.activeLink : styles.inactiveLink}`}>
                                 <OrderedListOutlined />
                                 <span>Orders</span>
@@ -38,7 +38,7 @@ const AdminSidebar = () => {
                     </div>
                 </div>
                 <div className={styles.logoutWrapper}>
-                    <a to="/login" onClick={logout} className={styles.logoutButton}>
+                    <a href="/login" onClick={logout} className={styles.logoutButton}>
                         <span className={styles.logoutText}>Logout</span>
                         <LogoutOutlined />
                     </a>
