@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const client = require('../config/elasticsearch/elasticClient');
-const Product = require('../models/productModel');
+const client = require('./elasticClient');
+const Product = require('../../models/productModel');
 require('dotenv').config();
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://shahparts:241180MujtabaHassan@cluster0.fc40i.mongodb.net/shah-parts?retryWrites=true&w=majority&appName=Cluster0';

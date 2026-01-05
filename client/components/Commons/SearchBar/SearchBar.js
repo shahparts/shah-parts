@@ -47,6 +47,7 @@ const SearchBar = () => {
     const debounceTimeout = useRef(null);
 
     const router = useRouter();
+    const inputRef = useRef(null);
 
     const searchRelevantProducts = async (searchTerm) => {
         setLoading(true);
@@ -112,16 +113,22 @@ const SearchBar = () => {
         }
     }, [router.pathname]);
 
-    const handleSendClick = async () => {
-        // setSearchTerm("");
-        // Collect IDs from results
-        const ids = await results.map(item => item.id);
-        // Pass IDs as a query param (if not too many) or use state management
+    const handleSendClick = () => {
+        const ids = results.map(item => item.id);
         router.push({
             pathname: '/shop',
             query: { searchQuery: searchTerm, ids: ids.join(',') }
         });
         ids?.length > 0 && setResults([]);
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            // If there is a search term or results, trigger same action as send
+            if (searchTerm?.trim() || results?.length > 0) {
+                handleSendClick();
+            }
+        }
     }
 
 
@@ -136,6 +143,8 @@ const SearchBar = () => {
                         className={styles.searchbox}
                         value={searchTerm}
                         onChange={handleSearch}
+                        onKeyDown={handleKeyDown}
+                        ref={inputRef}
                     />
                     {results?.length > 0 && (
                         <div className={styles.resultsContainer}>
@@ -161,7 +170,14 @@ const SearchBar = () => {
                     </div>
                     :
                     <div>
-                        <button onClick={handleSearch} className={`w-[43px] h-[43px] flex justify-center items-center ${sharedClasses.p2} ${sharedClasses.bgRed500} ${sharedClasses.textWhite} ${sharedClasses.roundedFull}`}>
+                        <button onClick={() => {
+                            // If there's a query, act like send. Otherwise focus input.
+                            if (searchTerm?.trim() || results?.length > 0) {
+                                handleSendClick();
+                            } else if (inputRef.current) {
+                                inputRef.current.focus();
+                            }
+                        }} className={`w-[43px] h-[43px] flex justify-center items-center ${sharedClasses.p2} ${sharedClasses.bgRed500} ${sharedClasses.textWhite} ${sharedClasses.roundedFull}`}>
                             <SearchOutlined className='text-[21px]' />
                         </button>
                     </div>
