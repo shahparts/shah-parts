@@ -56,7 +56,7 @@ const SearchBar = () => {
                 console.log("Line 36: ", searchTerm);
                 const res = await axios.post(
                     `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/search`,
-                    { q: searchTerm, perPage: 200 }
+                    { q: searchTerm, perPage: 100 }
                 );
                 setLoading(false);
                 if (res.status === 200) {
