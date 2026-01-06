@@ -127,6 +127,7 @@ const SearchBar = () => {
             // If there is a search term or results, trigger same action as send
             if (searchTerm?.trim() || results?.length > 0) {
                 handleSendClick();
+                e.target.blur();
             }
         }
     }
