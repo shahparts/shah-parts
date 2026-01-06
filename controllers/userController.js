@@ -163,75 +163,108 @@ exports.changePassword = async (req, res) => {
 /****************************************************** Forgot Password ***********************************************/
 exports.resetPasswordLink = async (req, res) => {
     try {
-        crypto.randomBytes(32, (error, buffer) => {
-            if (error) {
-                console.log(error);
-            }
-            const token = buffer.toString("hex");
-            User.findOne({ email: req.body.email }).then(user => {
-                if (!user) {
-                    res.status(201).json({ errorMessage: 'Email does not exist' });
-                }
-                user.resetToken = token;
-                user.expireToken = Date.now() + 3600000;
-                user.save((err, result) => {
-                    if (err) {
-                        res.status(400).json({ errorMessage: 'Token saving failed' });
-                    }
-                    if (result) {
-                        let url = '';
-                        if (process.env.NODE_ENV === 'production') {
-                            url = `${process.env.FRONTEND_URL}/reset-password/${token}` // The url of the domain on which you are hosting your frontend in production mode to serve the reset-password link page by sending this link to the email
-                        } else {
-                            url = `http://localhost:3000/reset-password/${token}`  // The url of the frontend in developement mode to serve the reset-password link page on the frontend by sending this link to the email
-                        }
-                        sendEmail(req.body.email, "Reset Password Link", `<p>Click this <a href = ${url}>${url}</a> to change your password.</p>`)
-                        res.status(200).json({ successMessage: 'Check your Inbox!' });
-                    }
-                })
+        const { email } = req.body;
 
-            })
-        })
+        // Validate email input
+        if (!email) {
+            return res.status(400).json({ errorMessage: 'Email is required' });
+        }
+
+        // Generate token
+        const token = crypto.randomBytes(32).toString('hex');
+
+        // Find user
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ errorMessage: 'Email does not exist' });
+        }
+
+        // Update user with reset token
+        user.resetToken = token;
+        user.expireToken = Date.now() + 3600000; // 1 hour expiry
+
+        await user.save();
+
+        // Generate reset URL
+        const baseUrl = process.env.NODE_ENV === 'production'
+            ? process.env.FRONTEND_URL
+            : 'http://localhost:3000';
+        const resetUrl = `${baseUrl}/reset-password/${token}`;
+
+        // Send email
+        await sendEmail(
+            email, 
+            'Reset Password Link',
+            `<p>Click this <a href="${resetUrl}">link</a> to reset your password.</p>
+             <p>This link will expire in 1 hour.</p>
+             <p>If you didn't request this, please ignore this email.</p>`
+        );
+
+        res.status(200).json({ 
+            successMessage: 'Password reset link sent! Check your inbox.'
+        });
+
     } catch (error) {
-        console.log(error);
-        res.status(400).send(error);
+        console.error('Reset password link error:', error);
+        res.status(500).json({
+            errorMessage: 'An error occurred while processing your request'
+        });
     }
+};
 
-}
-
+/****************************************************** Update Password ***********************************************/
 exports.updatePassword = async (req, res) => {
     try {
-        if (req.body.password !== req.body.confirm) {
-            res.status(400).json({ errorMessage: 'Passwords do not match.' })
-        }
+        const { password, confirm, token } = req.body;
 
-        else {
-            await User.findOne({ resetToken: req.body.token, expireToken: { $gt: Date.now() } }).then(user => {
-                if (!user) {
-                    res.status(201).json({ errorMessage: 'Try again. Session expired!' });
-                }
-                if (user) {
-                    var salt = bcrypt.genSaltSync(10);
-                    var hash = bcrypt.hashSync(req.body.password, salt);
-                    user.password = hash;
-                    user.resetToken = '',
-                        user.expireToken = '',
-                        user.save((error, result) => {
-                            if (error) {
-                                res.status(400).json({ errorMessage: 'Failed to update password' });
-                            } else {
-                                res.status(200).json({ successMessage: 'Password updated Successfully.' })
-                            }
-                        })
-                }
+        // Validate inputs
+        if (!password || !confirm || !token) {
+            return res.status(400).json({
+                errorMessage: 'All fields are required'
             });
         }
-    } catch (error) {
-        console.log(error);
-        res.status(400).send(error);
-    }
-}
 
+        if (password !== confirm) {
+            return res.status(400).json({
+                errorMessage: 'Passwords do not match'
+            });
+        }
+
+
+        // Find user with valid token
+        const user = await User.findOne({
+            resetToken: token,
+            expireToken: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                errorMessage: 'Invalid or expired reset token. Please request a new one.'
+            });
+        }
+
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Update user
+        user.password = hashedPassword;
+        user.resetToken = undefined;
+        user.expireToken = undefined;
+
+        await user.save();
+
+        res.status(200).json({
+            successMessage: 'Password updated successfully! You can now login with your new password.'
+        });
+
+    } catch (error) {
+        console.error('Update password error:', error);
+        res.status(500).json({
+            errorMessage: 'An error occurred while updating your password'
+        });
+    }
+};
 
 exports.deleteUser = async (req, res) => {
     try {

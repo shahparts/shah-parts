@@ -68,6 +68,10 @@
 
 @media (max-width: 700px) {
 
+    .SearchBar {
+        min-width: unset;
+    }
+
     .searchbox,
     .resultsList {
         max-width: 90% !important;

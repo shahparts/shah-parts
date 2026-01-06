@@ -33,6 +33,8 @@ const ShopPage = () => {
 
   const getAllData = async () => {
     setLoading(true);
+
+    console.log(filters);
     try {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get`, {
         page: current - 1,
@@ -104,17 +106,17 @@ const ShopPage = () => {
 
   // Handle search from FiltersBar
   const handleSearch = (filterValues) => {
-    if (filterValues?.make) {
-      router.push("/shop");
-      setTimeout(() => {
-        setFilters({
-          make: filterValues.make,
-          model: filterValues.model,
-          part: filterValues.part,
-          partAccessory: filterValues.partAccessory
-        });
-      }, 1000);
-    }
+    // if (filterValues?.make) {
+    router.query && router.push("/shop");
+    // setTimeout(() => {
+    setFilters({
+      make: filterValues.make,
+      model: filterValues.model,
+      part: filterValues.part,
+      partAccessory: filterValues.partAccessory
+    });
+    // }, 1000);
+    // }
   };
 
   return (
