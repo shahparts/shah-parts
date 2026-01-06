@@ -1,26 +1,18 @@
-const nodemailer = require('nodemailer');
-const config = require('./config/keys');
+const { Resend } = require('resend');
 
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    secure: false,
-    port: 587,
-    auth: {
-        user: config.EMAIL,
-        pass: config.PASSWORD
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-});
+// Using Resend SDK instead of Nodemailer
+// Env vars required:
+// - RESEND_API_KEY
+// - EMAIL_FROM (recommended, verified sender in Resend)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const sendEmail = (email, subject, html) => {
-    transporter.sendMail({
-        from: config.EMAIL, //put your gmail account here!!!
+const sendEmail = async (email, subject, html) => {
+    return resend.emails.send({
+        from: process.env.EMAIL_FROM || process.env.EMAIL,
         to: email,
-        subject: subject,
-        html: html,
-    })
-}
+        subject,
+        html,
+    });
+};
 
 module.exports = sendEmail;
