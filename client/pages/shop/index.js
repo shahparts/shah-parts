@@ -25,11 +25,11 @@ const ShopPage = () => {
     partAccessory: ''
   });
 
-  const ids = useMemo(() => {
-    return router.query.ids ? router.query.ids.split(',') : [];
-  }, [router.query.ids]);
+  const searchQuery = useMemo(() => {
+    return router.query.searchQuery || '';
+  }, [router.query.searchQuery]);
 
-  const hasIds = ids.length > 0;
+  const hasSearchQuery = searchQuery.trim().length > 0;
 
   const getAllData = async () => {
     setLoading(true);
@@ -59,46 +59,67 @@ const ShopPage = () => {
     }
   };
 
-  const getSelectedData = async () => {
+  const getSearchResults = async () => {
     setLoading(true);
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/by-ids`, {
-        ids,
-        page: current - 1,
-        pageSize: "20",
-        sortBy: sortValue
-      });
+      // First, get all matching product IDs from search
+      const searchRes = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/search`,
+        { q: searchQuery, perPage: 100 } // Get a large number to get all matches
+      );
 
-      setLoading(false);
-      if (res.status === 200) {
-        setProductsArray(res.data?.products || []);
-        setTotalCount(res.data.count || 0);
+      if (searchRes.status === 200) {
+        const ids = searchRes.data.results.map(item => item.id);
+        
+        if (ids.length > 0) {
+          // Then fetch products by IDs with pagination and sorting
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/by-ids`, {
+            ids,
+            page: current - 1,
+            pageSize: "20"
+          });
+
+          setLoading(false);
+          if (res.status === 200) {
+            setProductsArray(res.data?.products || []);
+            setTotalCount(res.data.count || 0);
+          } else {
+            ErrorAlert(res.data.errorMessage);
+          }
+        } else {
+          setLoading(false);
+          setProductsArray([]);
+          setTotalCount(0);
+        }
       } else {
-        ErrorAlert(res.data.errorMessage);
+        setLoading(false);
+        ErrorAlert(searchRes.data.errorMessage);
       }
     } catch (err) {
       setLoading(false);
       console.log(err);
+      setProductsArray([]);
+      setTotalCount(0);
     }
   };
 
   // Fetch data when filters, pagination, or sort changes
   useEffect(() => {
     // if (router.isReady) {
-    if (hasIds) {
-      getSelectedData();
+    if (hasSearchQuery) {
+      getSearchResults();
     } else {
       getAllData();
     }
     // }
-  }, [filters, current, sortValue, hasIds, router.query]);
+  }, [filters, current, sortValue, hasSearchQuery, searchQuery]);
 
   // Reset to page 1 when filters or sort changes
   useEffect(() => {
     if (router.isReady) {
       setCurrent(1);
     }
-  }, [filters.make, filters.model, filters.part, filters.partAccessory, sortValue, hasIds]);
+  }, [filters.make, filters.model, filters.part, filters.partAccessory, sortValue, hasSearchQuery, searchQuery]);
 
   const handleSortChange = (value) => {
     setSortValue(value);

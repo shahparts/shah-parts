@@ -40,92 +40,35 @@ const sharedClasses = {
 
 const SearchBar = () => {
     const [loading, setLoading] = useState(false);
-    // const [showResults, setShowResults] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [results, setResults] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const debounceTimeout = useRef(null);
 
     const router = useRouter();
     const inputRef = useRef(null);
 
-    const searchRelevantProducts = async (searchTerm) => {
-        setLoading(true);
-        try {
-            if (searchTerm) {
-                console.log("Line 36: ", searchTerm);
-                const res = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/search`,
-                    { q: searchTerm, perPage: 100 }
-                );
-                setLoading(false);
-                if (res.status === 200) {
-                    console.log("Line 43: ", res.data.results);
-                    setResults(res.data.results);
-                    setTotalCount(res.data.results.length);
-                } else {
-                    ErrorAlert(res.data.errorMessage);
-                }
-            }
-            else {
-                setResults([]);
-            }
-        } catch (err) {
-            setLoading(false);
-            console.log(err);
-        }
-    };
-
-    const handleSearch = (e) => {
-        console.log("Line 68: ", e.target.value);
-        const value = e.target.value;
-        setSearchTerm(value);
-
-        if (debounceTimeout.current) {
-            clearTimeout(debounceTimeout.current);
-        }
-
-        debounceTimeout.current = setTimeout(() => {
-            if (value?.trim()) {
-                console.log("Line 78: ", value);
-                searchRelevantProducts(value);
-            } else {
-                setResults([]);
-                setTotalCount(0);
-            }
-        }, 500); // 500ms debounce
-    };
-
-    const handleLinkClick = () => {
-        setSearchTerm("");
-        setResults([]);
-    }
 
     console.log(router.pathname)
 
     useEffect(() => {
 
         searchTerm && router.pathname !== "/shop" && setSearchTerm("");
-        results?.length > 0 && setResults([]);
-
         return () => {
 
         }
     }, [router.pathname]);
 
     const handleSendClick = () => {
-        const ids = results.map(item => item.id);
         router.push({
             pathname: '/shop',
-            query: { searchQuery: searchTerm, ids: ids.join(',') }
+            query: { searchQuery: searchTerm }
         });
-        ids?.length > 0 && setResults([]);
     }
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            // If there is a search term or results, trigger same action as send
-            if (searchTerm?.trim() || results?.length > 0) {
+            // If there is a search term, trigger same action as send
+            if (searchTerm?.trim()) {
                 handleSendClick();
                 e.target.blur();
             }
@@ -143,27 +86,13 @@ const SearchBar = () => {
                         type="search"
                         className={styles.searchbox}
                         value={searchTerm}
-                        onChange={handleSearch}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={handleKeyDown}
                         ref={inputRef}
                     />
-                    {results?.length > 0 && (
-                        <div className={styles.resultsContainer}>
-                            <List
-                                className={styles.resultsList}
-                                itemLayout="horizontal"
-                                dataSource={results}
-                                loading={loading}
-                                renderItem={item => (
-                                    <List.Item>
-                                        <Link onClick={handleLinkClick} href={`/product/${item.id}`}>{item.source.Title}</Link>
-                                    </List.Item>
-                                )}
-                            />
-                        </div>
-                    )}
+                    
                 </div>
-                {(results?.length > 0 || searchTerm) ?
+                {searchTerm ?
                     <div>
                         <button onClick={handleSendClick} className={`w-[43px] h-[43px] flex justify-center items-center ${sharedClasses.p2} ${sharedClasses.bgRed500} ${sharedClasses.textWhite} ${sharedClasses.roundedFull}`}>
                             <SendOutlined className='text-[21px]' />
@@ -173,7 +102,7 @@ const SearchBar = () => {
                     <div>
                         <button onClick={() => {
                             // If there's a query, act like send. Otherwise focus input.
-                            if (searchTerm?.trim() || results?.length > 0) {
+                            if (searchTerm?.trim()) {
                                 handleSendClick();
                             } else if (inputRef.current) {
                                 inputRef.current.focus();

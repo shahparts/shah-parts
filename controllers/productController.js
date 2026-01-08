@@ -339,39 +339,31 @@ exports.getProductById = async (req, res) => {
 
 exports.getProductsByIds = async (req, res) => {
   const { ids } = req.body;
-
+  
   const PAGE_SIZE = 20;
   const page = parseInt(req.body.page || "0");
-  
-  // Sorting logic based on the sort option selected
-  let sortOption = {};
-  switch (req.body.sortBy) {
-    case "lth":
-      sortOption.Price = 1; // Price: Low to High
-      break;
-    case "htl":
-      sortOption.Price = -1; // Price: High to Low
-      break;
-    case "a-z":
-      sortOption.Title = 1; // Product Name: A-Z
-      break;
-    case "z-a":
-      sortOption.Title = -1; // Product Name: Z-A
-      break;
-    case "createdAt":
-    default:
-      sortOption.createdAt = -1; // Released Date (default)
-      break;
-  }
 
   if (!ids || !Array.isArray(ids)) {
     return res.status(400).json({ error: 'Invalid ids' });
   }
   try {
-    const count = await Product.countDocuments({ _id: { $in: ids } });
+    const count = ids.length; await Product.countDocuments({ _id: { $in: ids } });
     var limitedIds = ids.slice(PAGE_SIZE * page, PAGE_SIZE * (page + 1));
-    const products = await Product.find({ _id: { $in: limitedIds } }).exec();//.limit(PAGE_SIZE).skip(PAGE_SIZE * page).exec();
-    res.status(200).json({ products, count });
+    
+    const products = await Product.find({ _id: { $in: limitedIds } }).exec();
+    
+    // Create a Map for O(1) lookup by ID
+    const productMap = new Map();
+    products.forEach(product => {
+      productMap.set(product._id.toString(), product);
+    });
+    
+    // Order products according to limitedIds array
+    const orderedProducts = limitedIds
+      .map(id => productMap.get(id.toString()))
+      .filter(product => product !== undefined); // Filter out any missing products
+    
+    res.status(200).json({ products: orderedProducts, count });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch products' });
   }
